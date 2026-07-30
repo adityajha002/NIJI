@@ -1,0 +1,31 @@
+.main{
+      width: 100%;
+      height: auto;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-top: 50px;
+      overflow: hidden;
+      scrollbar-width: none;     
+      -ms-overflow-style: none;
+      /* padding-left: 40px; */
+}
+.main::-webkit-scrollbar {
+      display: none;
+}
+.track{
+      display: flex;
+      width: max-content;
+      animation: autoScroll 24s linear infinite;
+}
+.main:hover .track{
+      animation-play-state: paused;
+}
+@keyframes autoScroll{
+      from{
+            transform: translateX(0);
+      }
+      to{
+            transform: translateX(-30%);
+      }
+}
