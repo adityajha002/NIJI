@@ -15,7 +15,9 @@ body{
 .filmWrapper {
   position: relative;
   width: clamp(300px, 94vw, 1600px);
-  background: url(../../assets/background.png) no-repeat center center fixed;
+  background: url(../../assets/background.webp);
+  /* background-repeat: no-repeat; */
+  background-position: center;
   background-size: cover;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-bottom: 0;
