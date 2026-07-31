@@ -8,7 +8,6 @@ import ProtectedRoute from './components/protectedRoutes/protectedRoutes.jsx'
 import Dashboard from './pages/dashboard/dashboard.jsx'
 import ShopEdit from './pages/edit/shopEdit.jsx';
 import ShopView from './pages/view/shop/shopView.jsx'
-import Test from './pages/test/test.jsx'
 import UserDashbord from './pages/userDashboard/user.jsx'
 import ProfileDirect from './components/routes/profileDirect.jsx'
 
