@@ -90,7 +90,10 @@
     min-height: 0;
     padding: 3px 8px;
     background-color: rgba(255, 255, 255, 0.05);
+<<<<<<< HEAD
     border: 0;
+=======
+>>>>>>> 16f25ea (optimized view for mobile users)
   }
   .active {
     background-color: #000;
