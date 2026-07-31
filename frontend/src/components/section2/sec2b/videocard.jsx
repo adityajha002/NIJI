@@ -1,15 +1,27 @@
 import React from 'react'
 import style from './sec2b.module.css';
 import videoSrc from '../../../assets/OIG2.mp4';
-
+import { useState,useEffect } from 'react';
 
 
 const VideoCard = () => {
+
+      const [mobile,setMobile] = useState(window.innerWidth<868);
+
+      useEffect(()=>{
+            const handleResize = () => {
+                  setMobile(window.innerWidth<868);
+            };
+            window.addEventListener("resize",handleResize);
+
+            return ()=> {
+                  window.removeEventListener("resize",handleResize);
+            }
+      },[])
+
   return (
     <div className={style.videoCards}>
-      <video className={style.video} autoPlay loop muted>
-        <source src={videoSrc} type="video/mp4" />
-      </video>
+      {mobile ? "":<video className={style.video} autoPlay loop muted><source src={videoSrc} type="video/mp4" /></video>}
       <div className={style.detailContainer}>
             <h1 className={style.detailHeading}> BUT WHY TO USE NIJI?</h1>
             <div className={style.detail}>
