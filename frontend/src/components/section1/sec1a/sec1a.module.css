@@ -79,16 +79,21 @@
   .cat_nav{
     width: 70%;
     border-radius: 7px;
-    padding: 6px 0;
+    padding: 2px 0;
   }
   .cat_nav:hover{
     width: 90%;
   }
   .cat_opt{
     border-radius: 4px;
-    font-size: 10px;
+    font-size: 15px;
     min-height: 0;
     padding: 3px 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  .active {
+    background-color: #000;
+    border: 1.5px solid rgba(255, 255, 255,0.3);
   }
   .sec1bhead{
     font-size: 17px;
