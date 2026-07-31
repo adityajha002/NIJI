@@ -1,4 +1,3 @@
-throw new Error("VERCEL TEST");
 import { useState } from 'react'
 import Nav from '../../components/nav/nav.jsx'
 import Section1 from '../../components/section1/section1.jsx'
@@ -6,7 +5,7 @@ import Section2 from '../../components/section2/section2.jsx'
 import Footer from '../../components/footer/footer.jsx'
 import style from './home.module.css'
 import SideMenu from '../../components/sideMenu/sideMenu.jsx'
-
+throw new Error("VERCEL TEST");
 function Home() {
   const [sideMenu, setSideMenu] = useState(false);
   return (
