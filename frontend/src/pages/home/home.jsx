@@ -10,7 +10,7 @@ function Home() {
   const [sideMenu, setSideMenu] = useState(false);
   return (
     <div className={style.main}>
-      <Nav setSideMenu={setSideMenu}/>
+      {/* <Nav setSideMenu={setSideMenu}/> */}
       <div className={style.filmWrapper}>
         <div className={style.film}>
           <Section1 />  
