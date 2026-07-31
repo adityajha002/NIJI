@@ -29,7 +29,6 @@ function App() {
             <Route path="/shops/:id" element={<ShopView />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/redirect-to-profile" element={<ProfileDirect />} />
-            <Route path="/test" element={<Test />} />
           </Routes>
         </AuthProvider>
       </Router>
