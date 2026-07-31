@@ -118,3 +118,21 @@
   color: rgba(255, 255, 255, 0.3);
   font-size: 12px;
 }
+
+@media (max-width:800px){
+  .linksGroup{
+    display: none;
+  }
+  .footer{
+    padding: 20px 20px;
+    background-color: rgba(0, 0, 0, 0)
+  }
+  .logo{
+    width: 90px;
+    height: 36px;
+    opacity: 0.7;
+  }
+  .bottomBar{
+    margin: 15px auto 0;
+  }
+}
