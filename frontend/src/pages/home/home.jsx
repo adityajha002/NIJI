@@ -1,3 +1,4 @@
+throw new Error("VERCEL TEST");
 import { useState } from 'react'
 import Nav from '../../components/nav/nav.jsx'
 import Section1 from '../../components/section1/section1.jsx'
