@@ -1,9 +1,8 @@
 .main {
   width: 0;
-  height: 100vh;
-  height: 100dvh;
+  height: calc(100% - 100px);
   position: fixed;
-  top: 0;
+  bottom: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(16px);
@@ -13,7 +12,6 @@
   z-index: 300;
   border-left: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-  padding-top: 50px;
 }
 
 .open {
@@ -26,7 +24,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 90px 30px 40px;
+  padding: 40px 30px 40px;
   box-sizing: border-box;
   gap: 20px;
 }
@@ -45,3 +43,11 @@
   text-align: center;
 }
 
+@media (max-width:800px){
+  .main{
+    height: calc( 100% - 70px );
+  }
+  .film{
+    padding-top: 20px;
+  }
+}
