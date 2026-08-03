@@ -1,0 +1,29 @@
+.main {
+  width: 100%;
+  margin: 0 0 16px 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.film {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  margin: 0;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.heading {
+  font-size: clamp(16px, 3vw, 24px);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  margin: 0;
+  text-align: center;
+}
