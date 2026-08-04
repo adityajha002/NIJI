@@ -6,7 +6,28 @@
   padding: 0 16px;
   box-sizing: border-box;
 }
-
+.searchIcon3,.searchIcon2,.searchIcon1{
+  width: 44px;
+  height: 44px;
+  margin-right: 18px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255);
+}
+.searchIcon1 {
+  background:url(../../../assets/searchIcon.png);
+  background-size: cover;
+  background-position: center;
+}
+.searchIcon2 {
+  background:url(../../../assets/findIcon.png);
+  background-size: cover;
+  background-position: center;
+}
+.searchIcon3 {
+  background:url(../../../assets/ChatIcon.png);
+  background-size: cover;
+  background-position: center;
+}
 .videoCards {
   width: 87%;
   max-width: 1200px;

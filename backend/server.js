@@ -5,7 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const prodRoutes = require('./routes/productRoutes');
 const app = express();
 
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
+app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/products", prodRoutes);
@@ -16,7 +16,6 @@ app.get('/', (req, res) => {
   res.send('Backend is running');
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(5000, () => {
+  console.log('Server is running on port 5000');
 });

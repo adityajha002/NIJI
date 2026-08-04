@@ -2,6 +2,8 @@ import React from 'react'
 import style from './sec2b.module.css';
 import videoSrc from '../../../assets/OIG2.mp4';
 import { useState,useEffect } from 'react';
+// import findIconImg from '../../../assets/findIcon.png';
+// import ChatIconImg from '../../../assets/ChatIcon.png';
 
 
 const VideoCard = () => {
@@ -29,13 +31,13 @@ const VideoCard = () => {
                         Local markets are full of great products, but finding exactly what you need can be frustrating. NIJI removes the guesswork by connecting you directly to nearby shops that have what you're looking for.
                   </p>
                   <div className={style.miniSearch}>
-                        Search the product you need to find before your shoping 
+                        <div className={style.searchIcon1}></div> Search the product you need to find before your shoping 
                   </div>
                   <div className={style.miniSearch}>
-                        We will find that product nearest to your location
+                        <div className={style.searchIcon2}></div>We will find that product nearest to your location
                   </div>
                   <div className={style.miniSearch}>
-                        You bargain with the price, get the location of the store
+                        <div className={style.searchIcon3}></div>You bargain with the price, get the location of the store
                   </div>
             </div>
       </div>
