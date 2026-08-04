@@ -227,6 +227,7 @@
 
 .productsSection {
       margin-top: 40px;
+      width: 90%;
 }
 
 .sectionHead {
@@ -253,7 +254,6 @@
 }
 
 .emptyState {
-      border: 1px dashed var(--line);
       border-radius: 14px;
       padding: 32px;
       text-align: center;
@@ -333,7 +333,7 @@
 
 @media (max-width: 640px) {
       .page {
-            padding: 20px 14px 48px;
+            padding: 0;
       }
 
       .body {
@@ -360,5 +360,9 @@
       .productGrid {
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 12px;
+      }
+      .card{
+            border-radius: 0;
+            padding-top: 20px;
       }
 }
