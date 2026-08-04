@@ -15,8 +15,9 @@
 }
 .searchIcon1 {
   background:url(../../../assets/searchIcon.png);
-  background-size: cover;
+  background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
 }
 .searchIcon2 {
   background:url(../../../assets/findIcon.png);

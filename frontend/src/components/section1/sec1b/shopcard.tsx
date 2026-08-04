@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import style from './shopcard.module.css';
 interface ShopcardProps {
   shop: {
-    shopid: string;
+    shopid: number;
     shopname: string;
     imageurl?: string;
   };

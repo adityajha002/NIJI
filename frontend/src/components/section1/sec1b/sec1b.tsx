@@ -65,7 +65,7 @@ const Sec1b = ({ category }: Sec1bProps) => {
 
   return (
     <div className={style.main} data-category={category}>
-      {loading && <Loading message="Loading shops" variant="inline" />}
+      {loading && <Loading message="Loading shops" variant="inline"/>}
 
       {!loading && error && (
         <p className={style.state}>{error}</p>
