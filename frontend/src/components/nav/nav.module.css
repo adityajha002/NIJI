@@ -56,6 +56,71 @@
   width: 40%;
   display: flex;
   justify-content: center;
+  position: relative;
+}
+
+.searchResults {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 10%;
+  width: 80%;
+
+  background: rgba(20, 20, 20, 0.98);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+
+  box-shadow: 0 20px 50px rgba(0,0,0,.45);
+
+  z-index: 9999;
+
+  overflow: hidden;
+
+  display: none;
+}
+
+.searchSection {
+  padding: 10px 0;
+}
+
+.searchTitle {
+  padding: 8px 20px;
+  color: rgba(255,255,255,.55);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.searchItem {
+  padding: 14px 20px;
+  color: white;
+  cursor: pointer;
+  transition: background .18s;
+}
+
+.searchItem:hover {
+  background: rgba(255,255,255,.08);
+}
+
+.divider {
+  height: 1px;
+  background: rgba(255,255,255,.08);
+}
+
+.viewAll {
+  padding: 16px 20px;
+  /* text-align: center; */
+  color: #fcfcfc;
+  cursor: pointer;
+  font-weight: 600;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.viewAll:hover {
+  background: rgba(255,255,255,.06);
 }
 
 .search {

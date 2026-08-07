@@ -24,7 +24,29 @@ const Nav: React.FC<NavProps> = ({ setSideMenu }) => {
         </Link>
 
         <div className={style.searchWrapper}>
-          <input type="text" className={style.search} placeholder="Search..." />
+          <input type="text" className={style.search} placeholder="Search..."/>
+          <div className={style.searchResults}>
+            <div className={style.searchSection}>
+              {/* <div className={style.searchTitle}>Products</div> */}
+
+              <div className={style.searchItem}>Amul Milk 500ml</div>
+              <div className={style.searchItem}>Fresh Bread</div>
+              <div className={style.searchItem}>Brown Eggs</div>
+            </div>
+
+            <div className={style.divider}></div>
+
+            <div className={style.searchSection}>
+              {/* <div className={style.searchTitle}>Shops</div> */}
+
+              <div className={style.searchItem}>Krishna Dairy</div>
+              <div className={style.searchItem}>Patel Grocery</div>
+            </div>
+
+            {/* <div className={style.viewAll}>
+              View all results →
+            </div> */}
+          </div>
         </div>
 
         <div className={style.navActions}>

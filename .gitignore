@@ -1,9 +1,25 @@
-﻿node_modules/
+# Dependencies
+node_modules/
 backend/node_modules/
 frontend/node_modules/
+meilisearch/node_modules/
+
+# Environment files
 .env
 **/.env
+meilisearch/.env
+
+# Build output
 frontend/dist/
 frontend/build/
+
+# OS files
 .DS_Store
+
+# Logs
 *.log
+
+# Meilisearch
+meilisearch/meilisearch.exe
+meilisearch/meili
+meilisearch/data.ms/
