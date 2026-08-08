@@ -59,9 +59,5 @@ initMeilisearch()
     app.listen(process.env.PORT || 3001, () => {
       console.log(`Search Service running on port ${process.env.PORT || 3001}`);
     });
-    setInterval(reQueue, 5 * 60 * 1000);
-  })
-  .catch((err) => {
-    console.error("Startup failed:", err);
-    process.exit(1);
+    setInterval(reQueue, 5 * 60 * 1000); 
   });
