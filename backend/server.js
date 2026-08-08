@@ -3,6 +3,7 @@ const cors = require('cors');
 const shopRoutes = require('./routes/shopRoutes');
 const authRoutes = require('./routes/authRoutes');
 const prodRoutes = require('./routes/productRoutes');
+const { retryQueue } = require('./config/services/Queue');
 const app = express();
 
 app.use(cors());
@@ -19,3 +20,7 @@ app.get('/', (req, res) => {
 app.listen(5000, () => {
   console.log('Server is running on port 5000');
 });
+
+setInterval(() => {
+  retryQueue().catch((err) => console.error('retryQueue failed:', err.message));
+}, 3 * 60 * 1000);

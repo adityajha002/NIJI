@@ -3,7 +3,7 @@ const db = require('../config/db');
 const upload = require('../middleware/upload');
 const { uploadImageBuffer } = require('../config/cloudinary');
 const verifyToken = require('../middleware/verifyToken');
-
+const { processProduct } = require('../config/services/Queue');
 const router = express.Router();
 
 const uploadProductImage = (req, res, next) => {
@@ -52,7 +52,8 @@ const createProduct = async (req, res) => {
                   [shop.shopid, name, description || null, price, imageUrl]
             );
 
-            res.status(201).json(result.rows[0]);
+            const product = result.rows[0];
+            res.status(201).json(product);
       } catch (error) {
             console.error('Error creating product:', error);
             res.status(500).json({ error: 'Internal server error' });
