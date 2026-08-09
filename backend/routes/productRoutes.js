@@ -54,6 +54,9 @@ const createProduct = async (req, res) => {
 
             const product = result.rows[0];
             res.status(201).json(product);
+            processProduct(product, shop).catch((err) => {
+                  console.error(`Queue processing failed for product ${product.product_id}:`, err.message);
+            });
       } catch (error) {
             console.error('Error creating product:', error);
             res.status(500).json({ error: 'Internal server error' });
@@ -91,7 +94,7 @@ router.get("/shop/:shopId", async (req, res) => {
             }
             const result = await db.query('SELECT * FROM products WHERE shop_id = $1', [shopId]);
             res.json(result.rows);
-      }catch(err) {
+      } catch (err) {
             console.error('Error fetching products:', err);
             res.status(500).json({ error: 'Server error' });
       }

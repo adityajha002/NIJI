@@ -146,7 +146,7 @@ export default function ShopDashboard(): React.JSX.Element {
         <div className={style.leftColumn}>
           {/* Top 70% */}
           <div className={style.leftTop}>
-            <div style={{ marginBottom: "40px" }}><MiniHeader /></div>
+            <div><MiniHeader /></div>
             <div className={style.leftTopInfo}>
               <div>
                 <div className={style.shopHeader}>
