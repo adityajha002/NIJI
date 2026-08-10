@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useCallback, CSSProperties } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import style from "./dashboard.module.css";
 import useAuth from "../../context/useAuth";
 import ProductCard from "./productcard/productcard";
 import AddProductForm from "./productcard/AddProductForm";
-import MiniHeader from "../../components/MiniHead/MiniHead";
-import Loading from "../../components/loading/loading";
 import { API_BASE_URL } from "../../config/api";
-
-interface MiniHeaderProps {
-  style?: CSSProperties;
-}
 
 interface AddProductProps {
   onClick: () => void;
@@ -34,20 +32,37 @@ interface Shop {
   [key: string]: unknown;
 }
 
-// --- Helper Component ---
+// --------------------------------------------------
+// Add Product Card
+// --------------------------------------------------
 
-function AddProduct({ onClick }: AddProductProps): React.JSX.Element {
+function AddProduct({
+  onClick,
+}: AddProductProps): React.JSX.Element {
   return (
-    <div className={style.addProduct} onClick={onClick}>
-      <h1 style={{ fontSize: '48px', margin: 0, lineHeight: 1 }}>+</h1>
-      <h2 style={{ fontSize: '15px', fontWeight: '600', marginTop: '8px' }}>
+    <div
+      className={style.addProduct}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          onClick();
+        }
+      }}
+    >
+      <div className={style.addIcon}>+</div>
+
+      <div className={style.addProductText}>
         Add a Product
-      </h2>
+      </div>
     </div>
   );
 }
 
-// --- Main Component ---
+// --------------------------------------------------
+// Main Dashboard
+// --------------------------------------------------
 
 export default function ShopDashboard(): React.JSX.Element {
   const { token, logout } = useAuth();
@@ -55,8 +70,8 @@ export default function ShopDashboard(): React.JSX.Element {
 
   const [shop, setShop] = useState<Shop | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [showAddProduct, setShowAddProduct] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
+  const [showAddProduct, setShowAddProduct] = useState(false);
 
   const handleAuthError = useCallback((): void => {
     logout();
@@ -64,33 +79,46 @@ export default function ShopDashboard(): React.JSX.Element {
   }, [logout, navigate]);
 
   const fetchProducts = useCallback(
-    async (shopId: string | number | undefined): Promise<void> => {
+    async (
+      shopId: string | number | undefined
+    ): Promise<void> => {
       if (!shopId) {
         setProducts([]);
         return;
       }
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/products/shop/${shopId}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`
+        const response = await fetch(
+          `${API_BASE_URL}/api/products/shop/${shopId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
 
-        if (response.status === 401 || response.status === 403) {
+        if (
+          response.status === 401 ||
+          response.status === 403
+        ) {
           handleAuthError();
           return;
         }
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch products: ${response.status}`);
+          throw new Error(
+            `Failed to fetch products: ${response.status}`
+          );
         }
 
         const data: Product[] = await response.json();
         setProducts(data);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error(
+          "Error fetching products:",
+          error
+        );
       }
     },
     [token, handleAuthError]
@@ -104,27 +132,39 @@ export default function ShopDashboard(): React.JSX.Element {
   useEffect(() => {
     const fetchShop = async (): Promise<void> => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/shops/dashboard`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`
+        const response = await fetch(
+          `${API_BASE_URL}/api/shops/dashboard`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
 
-        if (response.status === 401 || response.status === 403) {
+        if (
+          response.status === 401 ||
+          response.status === 403
+        ) {
           handleAuthError();
           return;
         }
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch shop: ${response.status}`);
+          throw new Error(
+            `Failed to fetch shop: ${response.status}`
+          );
         }
 
         const data: Shop = await response.json();
+
         setShop(data);
         await fetchProducts(data.shopid);
       } catch (error) {
-        console.error('Error fetching shop data:', error);
+        console.error(
+          "Error fetching shop data:",
+          error
+        );
       } finally {
         setLoading(false);
       }
@@ -136,82 +176,209 @@ export default function ShopDashboard(): React.JSX.Element {
   }, [token, handleAuthError, fetchProducts]);
 
   if (loading) {
-    return <Loading message="Loading dashboard" />;
+    return <div className={style.loadingScreen}>Loading...</div>;
   }
 
   return (
     <div className={style.page}>
       <div className={style.wrapper}>
-        {/* LEFT COLUMN — 70% top / 30% bottom */}
+
+        {/* ==================================================
+            LEFT COLUMN
+        ================================================== */}
+
         <div className={style.leftColumn}>
-          {/* Top 70% */}
-          <div className={style.leftTop}>
-            <div><MiniHeader /></div>
-            <div className={style.leftTopInfo}>
+
+          {/* -----------------------------------------------
+              SHOP OVERVIEW
+          ----------------------------------------------- */}
+
+          <section className={style.shopSection}>
+
+            <div className={style.shopSectionHeader}>
               <div>
-                <div className={style.shopHeader}>
-                  <div>
-                    <p className={style.shopLabel}>YOUR SHOP</p>
-                    <h2 className={style.shopName}>
-                      {shop?.shopname?.toUpperCase() || "SHOP NAME"}
-                    </h2>
-                  </div>
-                  {/* Shop avatar / logo placeholder */}
+                <span className={style.eyebrow}>
+                  YOUR SHOP
+                </span>
+
+                <h1 className={style.welcomeHeading}>
+                  Welcome back
+                </h1>
+              </div>
+
+              <div className={style.shopStatus}>
+                <span className={style.statusDot}></span>
+                ACTIVE
+              </div>
+            </div>
+
+
+            <div className={style.shopMain}>
+
+              {/* Shop Image */}
+
+              <div className={style.shopImageWrapper}>
+                {shop?.imageurl ? (
                   <img
                     className={style.shopAvatar}
-                    src={shop?.imageurl || ""}
-                    alt="Shop Avatar"
+                    src={shop.imageurl}
+                    alt={shop.shopname}
                   />
-                </div>
-
-                {/* Tab bar */}
-                <div className={style.navBar}>
-                  <div className={style.nav}>
-                    <div className={style.mapIcon}></div>
-                    MAPS
+                ) : (
+                  <div className={style.shopAvatarFallback}>
+                    {shop?.shopname
+                      ?.charAt(0)
+                      .toUpperCase() || "S"}
                   </div>
-                  <div className={style.cat}>
-                    {shop?.category?.toUpperCase() || "Shop"}
-                  </div>
-                </div>
+                )}
               </div>
 
-              <div className={style.descriptionRow}>
-                <div className={style.descriptionBox}>
-                  <p className={style.descriptionLabel}>
-                    {shop?.description?.toUpperCase() || "Shop Address"}
-                  </p>
+
+              {/* Shop Information */}
+
+              <div className={style.shopInfo}>
+
+                <h2 className={style.shopName}>
+                  {shop?.shopname?.toUpperCase() ||
+                    "SHOP NAME"}
+                </h2>
+
+                <div className={style.shopMeta}>
+                  <span className={style.categoryBadge}>
+                    {shop?.category?.toUpperCase() ||
+                      "SHOP"}
+                  </span>
                 </div>
 
-                {/* Pagination dots */}
-                <div className={style.dotsColumn}>
-                  <Link to="/">
-                    <div className={style.dot1} />
-                  </Link>
-                  <Link to="/shop-edit">
-                    <div className={style.dot2} />
-                  </Link>
-                  <div className={style.dot3} />
+                <div className={style.locationRow}>
+                  <span className={style.locationIcon}>
+                    ●
+                  </span>
+
+                  <span>
+                    {shop?.description ||
+                      "Shop location not available"}
+                  </span>
                 </div>
+
               </div>
             </div>
-          </div>
 
-          {/* Bottom 30% */}
-          <div className={style.leftBottom}>
+
+            {/* -------------------------------------------
+                SHOP ACTIONS
+            ------------------------------------------- */}
+
+            <div className={style.shopActions}>
+
+              <Link
+                to="/"
+                className={style.actionButton}
+              >
+                <span className={style.actionIcon}>
+                  <img
+                    src="/assets/home.png"
+                    alt=""
+                  />
+                </span>
+
+                <span>Dashboard</span>
+              </Link>
+
+
+              <Link
+                to="/shop-edit"
+                className={style.actionButton}
+              >
+                <span className={style.actionIcon}>
+                  <img
+                    src="/assets/edit.webp"
+                    alt=""
+                  />
+                </span>
+
+                <span>Edit Shop</span>
+              </Link>
+
+
+              <button
+                type="button"
+                className={style.actionButton}
+              >
+                <span className={style.actionIcon}>
+                  <img
+                    src="/assets/setting.png"
+                    alt=""
+                  />
+                </span>
+
+                <span>Settings</span>
+              </button>
+
+            </div>
+
+          </section>
+
+
+          {/* -----------------------------------------------
+              INBOX
+          ----------------------------------------------- */}
+
+          <section className={style.inboxSection}>
+
             <div className={style.inboxHeader}>
-              <h2 style={{ marginLeft: '60px' }}>INBOX</h2>
+
+              <div>
+                <span className={style.eyebrow}>
+                  COMMUNICATION
+                </span>
+
+                <h2>Inbox</h2>
+              </div>
+
+              <div className={style.inboxCount}>
+                0
+              </div>
+
             </div>
-          </div>
+
+
+            <div className={style.inboxEmpty}>
+
+              <div className={style.inboxIcon}>
+                ✉
+              </div>
+
+              <h3>No new messages</h3>
+
+              <p>
+                Customer messages and shop
+                notifications will appear here.
+              </p>
+
+            </div>
+
+          </section>
+
         </div>
 
-        {/* RIGHT COLUMN — full height */}
+
+        {/* ==================================================
+            RIGHT COLUMN — KEEPING YOUR EXISTING UI
+        ================================================== */}
+
         <div className={style.rightColumn}>
+
           <div className={style.rightHeader}>
-            <h1 className={style.productsHeading}>ACTIVE PRODUCTS</h1>
+            <h1 className={style.productsHeading}>
+              ACTIVE PRODUCTS
+            </h1>
           </div>
+
+
           {!showAddProduct && (
             <div className={style.productsGrid}>
+
               {products.map((product) => (
                 <ProductCard
                   key={product.product_id}
@@ -222,16 +389,29 @@ export default function ShopDashboard(): React.JSX.Element {
                   inStock={product.active !== false}
                 />
               ))}
-              <AddProduct onClick={() => setShowAddProduct(true)} />
+
+
+              <AddProduct
+                onClick={() =>
+                  setShowAddProduct(true)
+                }
+              />
+
             </div>
           )}
+
+
           {showAddProduct && (
             <AddProductForm
-              onCancel={() => setShowAddProduct(false)}
+              onCancel={() =>
+                setShowAddProduct(false)
+              }
               onSuccess={handleSuccess}
             />
           )}
+
         </div>
+
       </div>
     </div>
   );

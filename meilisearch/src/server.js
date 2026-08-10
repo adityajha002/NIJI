@@ -7,7 +7,15 @@ import { indexAll } from "./services/indexAll.js";
 import { reQueue } from "./services/reQueue.js";
 import { indexProduct } from "./services/indexProduct.js";
 import { searchProducts } from "./services/searchProducts.js";
+import cors from "cors";
+
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  methods: ['GET', 'POST'],
+}));
+
 
 app.use(express.json()); // needed once, before your routes, to parse JSON bodies
 
