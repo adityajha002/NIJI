@@ -32,6 +32,12 @@ interface Shop {
   [key: string]: unknown;
 }
 
+interface user {
+  id: string | number;
+  username: string;
+  email: string;
+  [key: string]: unknown;
+}
 // --------------------------------------------------
 // Add Product Card
 // --------------------------------------------------
@@ -65,7 +71,7 @@ function AddProduct({
 // --------------------------------------------------
 
 export default function ShopDashboard(): React.JSX.Element {
-  const { token, logout } = useAuth();
+  const { token, logout,user } = useAuth();
   const navigate = useNavigate();
 
   const [shop, setShop] = useState<Shop | null>(null);
@@ -198,17 +204,12 @@ export default function ShopDashboard(): React.JSX.Element {
             <div className={style.shopSectionHeader}>
               <div>
                 <span className={style.eyebrow}>
-                  YOUR SHOP
+                  Welcome Back
                 </span>
 
                 <h1 className={style.welcomeHeading}>
-                  Welcome back
+                  {user?.name?.toUpperCase() || "USER"}
                 </h1>
-              </div>
-
-              <div className={style.shopStatus}>
-                <span className={style.statusDot}></span>
-                ACTIVE
               </div>
             </div>
 
@@ -281,8 +282,6 @@ export default function ShopDashboard(): React.JSX.Element {
                     alt=""
                   />
                 </span>
-
-                <span>Dashboard</span>
               </Link>
 
 
@@ -296,13 +295,11 @@ export default function ShopDashboard(): React.JSX.Element {
                     alt=""
                   />
                 </span>
-
-                <span>Edit Shop</span>
               </Link>
 
 
-              <button
-                type="button"
+              <Link
+                to="/shop-edit"
                 className={style.actionButton}
               >
                 <span className={style.actionIcon}>
@@ -311,9 +308,7 @@ export default function ShopDashboard(): React.JSX.Element {
                     alt=""
                   />
                 </span>
-
-                <span>Settings</span>
-              </button>
+              </Link>
 
             </div>
 
