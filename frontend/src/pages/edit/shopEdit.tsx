@@ -6,28 +6,6 @@ import styles from "./edit.module.css";
 import Loading from "../../components/loading/loading.js";
 import { API_BASE_URL } from "../../config/api.js";
 
-interface Shop {
-  shopname: string;
-  category: string;
-  description: string;
-  pincode: string;
-  tags: string;
-  subcategory: string;
-  latitude: number | null;
-  longitude: number | null;
-}
-
-interface ShopFormData {
-  shopName: string;
-  category: string;
-  address: string;
-  pincode: string;
-  tags: string;
-  subCategory: string;
-  latitude: number | "";
-  longitude: number | "";
-}
-
 type LocationStatus = "idle" | "loading" | "done" | "error";
 
 type StyleKey = keyof typeof styles;
@@ -55,7 +33,7 @@ const cx = (...classNames: Array<string | false | null | undefined>): string =>
     .filter(Boolean)
     .join(" ");
 
-const toFormValues = (shop: Partial<Shop> = {}): ShopFormData => ({
+const toFormValues = (shop: Partial<ApiShop> = {}): EditShopFormData => ({
   shopName: shop.shopname || "",
   category: shop.category || "",
   address: shop.description || "",
@@ -75,7 +53,7 @@ export default function EditShopForm() {
     setValue,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ShopFormData>({
+  } = useForm<EditShopFormData>({
     defaultValues: {
       shopName: "",
       category: "",
@@ -116,7 +94,7 @@ export default function EditShopForm() {
           return;
         }
 
-        const result: Partial<Shop> & { error?: string } = await response
+        const result: Partial<ApiShop> & { error?: string } = await response
           .json()
           .catch(() => ({}));
 
@@ -156,7 +134,7 @@ export default function EditShopForm() {
     );
   };
 
-  const onSubmit = async (data: ShopFormData) => {
+  const onSubmit = async (data: EditShopFormData) => {
     setSubmitError("");
     setSubmitSuccess("");
 
@@ -183,7 +161,7 @@ export default function EditShopForm() {
         return;
       }
 
-      const result: Partial<Shop> & { error?: string } = await response
+      const result: Partial<ApiShop> & { error?: string } = await response
         .json()
         .catch(() => ({}));
 

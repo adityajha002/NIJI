@@ -7,27 +7,13 @@ import { getCurrentLocation } from '../../../../services/locationService';
 import useAuth from '../../../../context/useAuth';
 import { API_BASE_URL } from '../../../../config/api';
 
-interface ShopFormData {
-  image: FileList;
-  name: string;
-  category: string;
-  tags: string;
-  address: string;
-  pincode: string;
-}
-
-interface Coordinates {
-  latitude: number | null;
-  longitude: number | null;
-}
-
 const AddBox: React.FC = () => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ShopFormData>();
+  } = useForm<AddShopFormData>();
 
   const { token, updateUserRole } = useAuth();
   const navigate = useNavigate();
@@ -70,7 +56,7 @@ const AddBox: React.FC = () => {
     }
   };
 
-  const onSubmit = async (data: ShopFormData): Promise<void> => {
+  const onSubmit = async (data: AddShopFormData): Promise<void> => {
     setSubmitError('');
     setSubmitSuccess(false);
 

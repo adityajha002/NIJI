@@ -14,30 +14,6 @@ interface AddProductProps {
   onClick: () => void;
 }
 
-interface Product {
-  product_id: string | number;
-  imageurl: string;
-  name: string;
-  price: number | string;
-  active?: boolean;
-  [key: string]: unknown;
-}
-
-interface Shop {
-  shopid: string | number;
-  shopname: string;
-  imageurl?: string;
-  category?: string;
-  description?: string;
-  [key: string]: unknown;
-}
-
-interface user {
-  id: string | number;
-  username: string;
-  email: string;
-  [key: string]: unknown;
-}
 // --------------------------------------------------
 // Add Product Card
 // --------------------------------------------------
@@ -74,8 +50,8 @@ export default function ShopDashboard(): React.JSX.Element {
   const { token, logout,user } = useAuth();
   const navigate = useNavigate();
 
-  const [shop, setShop] = useState<Shop | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [shop, setShop] = useState<ApiShop | null>(null);
+  const [products, setProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddProduct, setShowAddProduct] = useState(false);
 
@@ -118,7 +94,7 @@ export default function ShopDashboard(): React.JSX.Element {
           );
         }
 
-        const data: Product[] = await response.json();
+        const data: ApiProduct[] = await response.json();
         setProducts(data);
       } catch (error) {
         console.error(
@@ -162,7 +138,7 @@ export default function ShopDashboard(): React.JSX.Element {
           );
         }
 
-        const data: Shop = await response.json();
+        const data: ApiShop = await response.json();
 
         setShop(data);
         await fetchProducts(data.shopid);

@@ -4,26 +4,6 @@ import style from "./shopView.module.css";
 import Loading from "../../../components/loading/loading";
 import { API_BASE_URL } from "../../../config/api";
 
-interface Shop {
-  shopid: number;
-  shopname: string;
-  category: string;
-  pincode: string;
-  description: string;
-  imageurl: string;
-  latitude: number;
-  longitude: number;
-  tags: string[] | string;
-}
-
-interface Product {
-  product_id: number;
-  name: string;
-  description: string;
-  price: number;
-  imageurl: string;
-}
-
 type FailedImages = {
   shop?: boolean;
   [key: number]: boolean;
@@ -32,8 +12,8 @@ type FailedImages = {
 const ShopView = () => {
   const { id } = useParams<{ id: string }>();
 
-  const [shop, setShop] = useState<Shop | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [shop, setShop] = useState<ApiShop | null>(null);
+  const [products, setProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [failedImages, setFailedImages] = useState<FailedImages>({});
@@ -59,8 +39,8 @@ const ShopView = () => {
           throw new Error("Failed to fetch shop products");
         }
 
-        const shopData: Shop = await shopRes.json();
-        const productsData: Product[] = await productsRes.json();
+        const shopData: ApiShop = await shopRes.json();
+        const productsData: ApiProduct[] = await productsRes.json();
 
         setShop(shopData);
         setProducts(productsData);

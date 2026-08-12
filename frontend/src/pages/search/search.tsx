@@ -4,19 +4,10 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useParams } from "react-router-dom";
 import style from "./search.module.css";
 import Header from "../../components/nav/nav";
-type SearchProduct = {
-  product_id: number;
-  name: string;
-  description?: string;
-  price: number;
-  category?: string;
-  image_url?: string;
-  shop_name?: string;
-  shop_id?: number;
-  distance?: number;
-};
+import { API_BASE_URL } from "../../config/api";
 
 const demoProducts: SearchProduct[] = [
   {
@@ -146,6 +137,8 @@ function CloseIcon() {
 }
 
 export default function Search() {
+  const { searchTerm } = useParams<{ searchTerm?: string }>();
+  const routeSearchTerm = searchTerm ?? "";
   const [query, setQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -200,11 +193,11 @@ export default function Search() {
     })
     .sort((a, b) => {
       if (sort === "price-low") {
-        return a.price - b.price;
+        return Number(a.price || 0) - Number(b.price || 0);
       }
 
       if (sort === "price-high") {
-        return b.price - a.price;
+        return Number(b.price || 0) - Number(a.price || 0);
       }
 
       if (sort === "distance") {
@@ -239,38 +232,27 @@ export default function Search() {
     setSubmittedQuery(cleanTerm);
     setShowSuggestions(false);
 
-    /*
-     * ==========================================
-     * MEILISEARCH INTEGRATION
-     * ==========================================
-     *
-     * Replace this demo section with your
-     * existing Niji search API.
-     *
-     * Example:
-     *
-     * const response = await fetch(
-     *   `${BACKEND_URL}/search?q=${encodeURIComponent(cleanTerm)}`
-     * );
-     *
-     * const data = await response.json();
-     *
-     * setResults(data.hits);
-     */
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/search?q=${encodeURIComponent(cleanTerm)}`
+      );
 
-    const searched = demoProducts.filter((product) => {
-      const text = `
-        ${product.name}
-        ${product.description}
-        ${product.category}
-        ${product.shop_name}
-      `.toLowerCase();
+      if (!response.ok) {
+        throw new Error(`Search failed: ${response.status}`);
+      }
 
-      return text.includes(cleanTerm.toLowerCase());
-    });
-
-    setResults(searched);
+      const data: SearchProduct[] = await response.json();
+      setResults(data);
+    } catch (error) {
+      console.error("Search error:", error);
+      setResults([]);
+    }
   };
+
+  useEffect(() => {
+    setQuery(routeSearchTerm);
+    performSearch(routeSearchTerm);
+  }, [routeSearchTerm]);
 
   const handleSubmit = (
     event: FormEvent<HTMLFormElement>
@@ -302,7 +284,7 @@ export default function Search() {
       ========================================== */}
 
       <main>
-        <Header />
+        <Header initialQuery={routeSearchTerm} />
 
         {/* =========================================
             RESULTS

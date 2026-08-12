@@ -4,25 +4,12 @@ import ShopCard from './shopcard';
 import Loading from '../../loading/loading';
 import { API_BASE_URL } from '../../../config/api';
 
-interface Shop {
-  shopid: number;
-  shopname: string;
-  category: string;
-  pincode: string;
-  description: string;
-  imageurl: string;
-  latitude: number;
-  longitude: number;
-  userid: number;
-  tags: string[];
-}
-
 interface Sec1bProps {
   category: string;
 }
 
 const Sec1b = ({ category }: Sec1bProps) => {
-  const [shops, setShops] = useState<Shop[]>([]);
+  const [shops, setShops] = useState<ApiShop[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -40,7 +27,7 @@ const Sec1b = ({ category }: Sec1bProps) => {
           throw new Error(`Failed to load shops (${res.status})`);
         }
 
-        const data: Shop[] = await res.json();
+        const data: ApiShop[] = await res.json();
         setShops(data);
       } catch (err) {
         console.error('Error loading shops for category:', err);
@@ -75,7 +62,7 @@ const Sec1b = ({ category }: Sec1bProps) => {
         <p className={style.state}>No shops found.</p>
       )}
 
-      {visibleShops.length > 0 && (
+      {!loading && visibleShops.length > 0 && (
         <div
           key={category}
           className={style.track}
