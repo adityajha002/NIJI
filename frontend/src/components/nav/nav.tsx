@@ -79,9 +79,14 @@ const Nav: React.FC<NavProps> = ({ setSideMenu }) => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => setIsFocused(true)}
-              onBlur={() => setTimeout(() => setIsFocused(false), 150)}
+              onBlur={() => setTimeout(() => setIsFocused(false), 300)}
             />
-            <div className={`${style.searchIcon} ${isFocused ? style.active : ""}`}/>
+            <Link
+              to="/search"
+              className={`${style.searchIcon} ${isFocused ? style.active : ""}`}
+              onMouseDown={(event) => event.preventDefault()}
+              aria-label="Open search page"
+            />
           </div>
 
           {showDropdown && (

@@ -10,7 +10,7 @@ import ShopEdit from './pages/edit/shopEdit';
 import ShopView from './pages/view/shop/shopView'
 import UserDashbord from './pages/userDashboard/user'
 import ProfileDirect from './components/routes/profileDirect'
-
+import Search from './pages/search/search'
 function App() {
 
   return (
@@ -22,6 +22,7 @@ function App() {
               <Route path="/add" element={<Add />} />
               <Route path="/profile" element={<UserDashbord onBack={() => {}} />}/>
             </Route>
+            <Route path="/search" element={<Search />} />
             <Route element={<ProtectedRoute role="shop" />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/shop-edit" element={<ShopEdit />} />
