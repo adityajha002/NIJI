@@ -2,7 +2,7 @@
 
 **Discover what's actually in stock near you.**
 
-NIJI (also called NijiHaat) is a hyperlocal product search engine that connects shoppers with nearby local shops — groceries, stationery, pharmacies, and more. Instead of scrolling through generic marketplace listings, users search for a product and instantly see which nearby shops actually have it, sorted by distance.
+NIJI (also called NijiHaat) is a hyperlocal product Geolocation search engine that connects shoppers with nearby local shops — groceries, stationery, pharmacies, and more. Instead of scrolling through generic marketplace listings, users search for a product and instantly see which nearby shops actually have it, sorted by distance.
 
 ---
 
