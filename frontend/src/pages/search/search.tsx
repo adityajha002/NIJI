@@ -1,69 +1,14 @@
 import React, {
   FormEvent,
   useEffect,
-  useRef,
+  useMemo,
   useState,
 } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import style from "./search.module.css";
 import Header from "../../components/nav/nav";
 import { API_BASE_URL } from "../../config/api";
-
-const demoProducts: SearchProduct[] = [
-  {
-    product_id: 1,
-    name: "Full Cream Milk",
-    description: "Fresh full cream milk",
-    price: 68,
-    category: "Dairy",
-    image_url:
-      "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=500&q=80",
-    shop_name: "Sharma Dairy",
-    distance: 0.7,
-  },
-  {
-    product_id: 2,
-    name: "Fresh Cow Milk",
-    description: "Fresh local cow milk",
-    price: 72,
-    category: "Dairy",
-    image_url:
-      "https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=500&q=80",
-    shop_name: "Green Farm Dairy",
-    distance: 1.2,
-  },
-  {
-    product_id: 3,
-    name: "Amul Taaza Milk",
-    description: "Fresh packaged milk",
-    price: 64,
-    category: "Dairy",
-    image_url:
-      "https://images.unsplash.com/photo-1628088062854-d1870b4553da?auto=format&fit=crop&w=500&q=80",
-    shop_name: "Gupta General Store",
-    distance: 1.8,
-  },
-  {
-    product_id: 4,
-    name: "Buffalo Milk",
-    description: "Rich and creamy buffalo milk",
-    price: 78,
-    category: "Dairy",
-    image_url:
-      "https://images.unsplash.com/photo-1528498033373-3c6c08e93d79?auto=format&fit=crop&w=500&q=80",
-    shop_name: "Verma Dairy",
-    distance: 2.4,
-  },
-];
-
-const categories = [
-  "All",
-  "Dairy",
-  "Groceries",
-  "Fruits & Vegetables",
-  "Bakery",
-  "Snacks",
-];
+import { getCurrentLocation } from "../../services/locationService";
 
 function SearchIcon() {
   return (
@@ -139,59 +84,93 @@ function CloseIcon() {
 export default function Search() {
   const { searchTerm } = useParams<{ searchTerm?: string }>();
   const routeSearchTerm = searchTerm ?? "";
-  const [query, setQuery] = useState("");
+
+  const [query, setQuery] = useState(routeSearchTerm);
   const [submittedQuery, setSubmittedQuery] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
-
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState<string | null>(null);
   const [sort, setSort] = useState("relevance");
-
   const [mobileFilters, setMobileFilters] = useState(false);
+  const [results, setResults] = useState<SearchProduct[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
+  const [locationError, setLocationError] = useState<
+    string | null
+  >(null);
 
-  const searchRef = useRef<HTMLDivElement>(null);
+  const performSearch = async (
+    term: string,
+    sortValue: string = sort,
+    coords: { lat: number; lng: number } | null = location
+  ) => {
+    const cleanTerm = term.trim();
 
-  /*
-   * Demo data.
-   *
-   * Replace this with your Meilisearch response later.
-   */
+    setSubmittedQuery(cleanTerm);
+    setCategory(null);
 
-  const [results, setResults] =
-    useState<SearchProduct[]>(demoProducts);
+    if (!cleanTerm) {
+      setResults([]);
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const params = new URLSearchParams({ q: cleanTerm });
+
+      if (sortValue === "distance" && coords) {
+        params.set("lat", String(coords.lat));
+        params.set("lng", String(coords.lng));
+        params.set("sortBy", "distance");
+      }
+
+      const response = await fetch(
+        `${API_BASE_URL}/api/search?${params.toString()}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`Search failed: ${response.status}`);
+      }
+
+      const data: SearchProduct[] = await response.json();
+      setResults(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Search error:", error);
+      setResults([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
-        setShowSuggestions(false);
-      }
-    };
+    setQuery(routeSearchTerm);
+    performSearch(routeSearchTerm);
+  }, [routeSearchTerm]);
 
-    document.addEventListener(
-      "mousedown",
-      handleOutsideClick
+  const categories = useMemo(() => {
+    const uniqueCategories = new Set(
+      results
+        .map((product) => product.category?.trim())
+        .filter((value): value is string => Boolean(value))
     );
 
-    return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleOutsideClick
-      );
-    };
-  }, []);
+    return Array.from(uniqueCategories).sort((a, b) =>
+      a.localeCompare(b)
+    );
+  }, [results]);
 
-  const filteredResults = results
-    .filter((product) => {
-      if (category === "All") return true;
+  const filteredResults = useMemo(() => {
+    const filtered = category
+      ? results.filter(
+          (product) =>
+            product.category?.toLowerCase() ===
+            category.toLowerCase()
+        )
+      : [...results];
 
-      return (
-        product.category?.toLowerCase() ===
-        category.toLowerCase()
-      );
-    })
-    .sort((a, b) => {
+    return filtered.sort((a, b) => {
       if (sort === "price-low") {
         return Number(a.price || 0) - Number(b.price || 0);
       }
@@ -209,104 +188,76 @@ export default function Search() {
 
       return 0;
     });
+  }, [results, category, sort]);
 
-  const suggestions = [
-    "milk",
-    "fresh milk",
-    "cow milk",
-    "buffalo milk",
-    "milk products",
-  ].filter((item) =>
-    item.toLowerCase().includes(query.toLowerCase())
-  );
+  const handleSortChange = async (value: string) => {
+    setSort(value);
 
-  const performSearch = async (term: string) => {
-    const cleanTerm = term.trim();
-
-    if (!cleanTerm) {
-      setSubmittedQuery("");
-      setResults(demoProducts);
+    if (value !== "distance") {
+      performSearch(submittedQuery, value, location);
       return;
     }
 
-    setSubmittedQuery(cleanTerm);
-    setShowSuggestions(false);
+    if (location) {
+      performSearch(submittedQuery, "distance", location);
+      return;
+    }
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/search?q=${encodeURIComponent(cleanTerm)}`
-      );
+      const coords = await getCurrentLocation();
+      const nextLocation = {
+        lat: coords.latitude,
+        lng: coords.longitude,
+      };
 
-      if (!response.ok) {
-        throw new Error(`Search failed: ${response.status}`);
-      }
-
-      const data: SearchProduct[] = await response.json();
-      setResults(data);
+      setLocation(nextLocation);
+      setLocationError(null);
+      performSearch(submittedQuery, "distance", nextLocation);
     } catch (error) {
-      console.error("Search error:", error);
-      setResults([]);
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Location access is needed to sort by distance.";
+
+      console.error("Location error:", error);
+      setLocationError(message);
+      setSort("relevance");
+      performSearch(submittedQuery, "relevance", null);
     }
   };
-
-  useEffect(() => {
-    setQuery(routeSearchTerm);
-    performSearch(routeSearchTerm);
-  }, [routeSearchTerm]);
 
   const handleSubmit = (
     event: FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-
-    performSearch(query);
-  };
-
-  const handleSuggestion = (suggestion: string) => {
-    setQuery(suggestion);
-    performSearch(suggestion);
+    performSearch(query, sort, location);
   };
 
   const clearSearch = () => {
     setQuery("");
     setSubmittedQuery("");
-    setResults(demoProducts);
-    setShowSuggestions(false);
+    setCategory(null);
+    setResults([]);
+  };
+
+  const clearFilters = () => {
+    setCategory(null);
   };
 
   return (
     <div className={style.page}>
-      {/* =========================================
-          HEADER
-      ========================================== */}
-      {/* =========================================
-          SEARCH AREA
-      ========================================== */}
-
       <main>
         <Header initialQuery={routeSearchTerm} />
 
-        {/* =========================================
-            RESULTS
-        ========================================== */}
-
         <section className={style.resultsArea}>
           <div className={style.resultsContainer}>
-            {/* MOBILE FILTER BUTTON */}
-
             <button
               className={style.mobileFilterButton}
-              onClick={() =>
-                setMobileFilters(true)
-              }
+              onClick={() => setMobileFilters(true)}
             >
               <FilterIcon />
               Filters
             </button>
-
-            {/* =====================================
-                FILTER SIDEBAR
-            ====================================== */}
 
             <aside
               className={`${style.filters} ${
@@ -323,143 +274,54 @@ export default function Search() {
 
                 <button
                   className={style.mobileClose}
-                  onClick={() =>
-                    setMobileFilters(false)
-                  }
+                  onClick={() => setMobileFilters(false)}
                 >
                   <CloseIcon />
                 </button>
               </div>
 
-              <div className={style.filterSection}>
-                <h3>Category</h3>
+              {categories.length > 0 && (
+                <div className={style.filterSection}>
+                  <h3>Category</h3>
 
-                {categories.map((item) => (
-                  <label
-                    className={style.categoryOption}
-                    key={item}
-                  >
-                    <input
-                      type="radio"
-                      name="category"
-                      checked={category === item}
-                      onChange={() =>
-                        setCategory(item)
-                      }
-                    />
+                  {categories.map((item) => (
+                    <label
+                      className={style.categoryOption}
+                      key={item}
+                    >
+                      <input
+                        type="radio"
+                        name="category"
+                        checked={category === item}
+                        onChange={() => setCategory(item)}
+                      />
 
-                    <span
-                      className={
-                        style.radio
-                      }
-                    />
+                      <span className={style.radio} />
 
-                    <span>{item}</span>
-                  </label>
-                ))}
-              </div>
+                      <span>{item}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
 
-              <div className={style.filterSection}>
-                <h3>Availability</h3>
-
-                <label
-                  className={style.checkOption}
+              {category && (
+                <button
+                  className={style.clearFilters}
+                  onClick={clearFilters}
                 >
-                  <input
-                    type="checkbox"
-                    defaultChecked
-                  />
-
-                  <span
-                    className={
-                      style.checkbox
-                    }
-                  />
-
-                  <span>Available now</span>
-                </label>
-
-                <label
-                  className={style.checkOption}
-                >
-                  <input type="checkbox" />
-
-                  <span
-                    className={
-                      style.checkbox
-                    }
-                  />
-
-                  <span>Open shops</span>
-                </label>
-              </div>
-
-              <div className={style.filterSection}>
-                <h3>Distance</h3>
-
-                <label
-                  className={style.distanceOption}
-                >
-                  <span>Within 1 km</span>
-                  <input
-                    type="radio"
-                    name="distance"
-                  />
-                </label>
-
-                <label
-                  className={style.distanceOption}
-                >
-                  <span>Within 3 km</span>
-                  <input
-                    type="radio"
-                    name="distance"
-                    defaultChecked
-                  />
-                </label>
-
-                <label
-                  className={style.distanceOption}
-                >
-                  <span>Within 5 km</span>
-                  <input
-                    type="radio"
-                    name="distance"
-                  />
-                </label>
-              </div>
-
-              <button
-                className={style.clearFilters}
-                onClick={() =>
-                  setCategory("All")
-                }
-              >
-                Clear filters
-              </button>
+                  Clear filters
+                </button>
+              )}
             </aside>
-
-            {/* =====================================
-                RESULT CONTENT
-            ====================================== */}
 
             <div className={style.resultsContent}>
               <div className={style.resultsTop}>
                 <div>
-                  {/* <span className={style.resultLabel}>
-                    SEARCH RESULTS
-                  </span> */}
-
                   <h2>
                     {submittedQuery
                       ? `Results for "${submittedQuery}"`
                       : "Discover products near you"}
                   </h2>
-
-                  {/* <p>
-                    {filteredResults.length} products
-                    found nearby
-                  </p> */}
                 </div>
 
                 <div className={style.sort}>
@@ -471,21 +333,18 @@ export default function Search() {
                     id="sort"
                     value={sort}
                     onChange={(event) =>
-                      setSort(event.target.value)
+                      handleSortChange(event.target.value)
                     }
                   >
                     <option value="relevance">
                       Relevance
                     </option>
-
                     <option value="distance">
                       Nearest
                     </option>
-
                     <option value="price-low">
                       Price: Low to High
                     </option>
-
                     <option value="price-high">
                       Price: High to Low
                     </option>
@@ -493,190 +352,121 @@ export default function Search() {
                 </div>
               </div>
 
-              {/* ACTIVE FILTER */}
+              {locationError && (
+                <p className={style.locationError}>
+                  {locationError}
+                </p>
+              )}
 
-              {category !== "All" && (
+              {category && (
                 <div className={style.activeFilters}>
                   <span>Category:</span>
 
-                  <button
-                    onClick={() =>
-                      setCategory("All")
-                    }
-                  >
+                  <button onClick={clearFilters}>
                     {category}
                     <CloseIcon />
                   </button>
                 </div>
               )}
 
-              {/* RESULTS */}
-
-              {filteredResults.length > 0 ? (
+              {loading ? (
+                <div className={style.noResults}>
+                  <h3>Loading products</h3>
+                </div>
+              ) : filteredResults.length > 0 ? (
                 <div className={style.resultList}>
-                  {filteredResults.map(
-                    (product) => (
-                      <article
-                        className={
-                          style.resultItem
-                        }
-                        key={
-                          product.product_id
-                        }
-                      >
-                        <div
-                          className={
-                            style.productImage
-                          }
-                        >
-                          {product.image_url ? (
-                            <img
-                              src={
-                                product.image_url
-                              }
-                              alt={
-                                product.name
-                              }
-                            />
-                          ) : (
-                            <span>
-                              Niji
-                            </span>
-                          )}
-                        </div>
+                  {filteredResults.map((product) => (
+                    <Link
+                      className={style.resultItem}
+                      to={`/products/${product.product_id}`}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <div className={style.productImage}>
+                        {product.image_url ? (
+                          <img
+                            src={product.image_url}
+                            alt={product.name}
+                          />
+                        ) : (
+                          <span>Niji</span>
+                        )}
+                      </div>
 
-                        <div
-                          className={
-                            style.productInfo
-                          }
-                        >
+                      <div className={style.productInfo}>
+                        {product.category && (
                           <div
                             className={
                               style.productCategory
                             }
                           >
-                            {product.category ||
-                              "Product"}
+                            {product.category}
                           </div>
+                        )}
 
-                          <h3>
-                            {product.name}
-                          </h3>
+                        <h3>{product.name}</h3>
 
-                          <p>
-                            {product.description ||
-                              "Available from a local shop near you."}
-                          </p>
+                        {product.description && (
+                          <p>{product.description}</p>
+                        )}
 
-                          <div
-                            className={
-                              style.productMeta
-                            }
-                          >
-                            <strong>
-                              {product.shop_name ||
-                                "Local Shop"}
-                            </strong>
+                        <div className={style.productMeta}>
+                          {product.shop_name && (
+                            <>
+                              <strong>
+                                {product.shop_name}
+                              </strong>
 
-                            <span>•</span>
+                              {product.distance != null && (
+                                <span>•</span>
+                              )}
+                            </>
+                          )}
 
+                          {product.distance != null && (
                             <span>
-                              {product.distance
-                                ? `${product.distance} km away`
-                                : "Nearby"}
+                              {product.distance} km away
                             </span>
-                          </div>
+                          )}
                         </div>
+                      </div>
 
-                        <div
-                          className={
-                            style.productPrice
-                          }
-                        >
-                          <span>
-                            From
-                          </span>
+                      <div className={style.productPrice}>
+                        <span>From</span>
 
-                          <strong>
-                            ₹
-                            {product.price}
-                          </strong>
-                        </div>
+                        <strong>
+                          ₹{product.price}
+                        </strong>
+                      </div>
 
-                        <a
-                          href={`/products/${product.product_id}`}
-                          className={
-                            style.resultAction
-                          }
-                          aria-label={`View ${product.name}`}
-                        >
-                          <ArrowIcon />
-                        </a>
-                      </article>
-                    )
-                  )}
+                      <a
+                        href={`/products/${product.product_id}`}
+                        className={style.resultAction}
+                        aria-label={`View ${product.name}`}
+                      >
+                        <ArrowIcon />
+                      </a>
+                    </Link>
+                  ))}
                 </div>
               ) : (
-                <div
-                  className={
-                    style.noResults
-                  }
-                >
-                  <div
-                    className={
-                      style.noResultsIcon
-                    }
-                  >
+                <div className={style.noResults}>
+                  <div className={style.noResultsIcon}>
                     <SearchIcon />
                   </div>
 
-                  <h3>
-                    Nothing found
-                  </h3>
+                  <h3>Nothing found</h3>
 
                   <p>
-                    We couldn't find anything
-                    matching "
-                    {submittedQuery || query}
-                    ".
+                    {submittedQuery
+                      ? `No products matched "${submittedQuery}".`
+                      : "Search for a product to see nearby results."}
                   </p>
 
-                  <button
-                    onClick={clearSearch}
-                  >
-                    Clear search
-                  </button>
-                </div>
-              )}
-
-              {/* PAGINATION */}
-
-              {filteredResults.length > 0 && (
-                <div
-                  className={
-                    style.pagination
-                  }
-                >
-                  <button disabled>
-                    Previous
-                  </button>
-
-                  <div>
-                    <button
-                      className={
-                        style.currentPage
-                      }
-                    >
-                      1
+                  {(query || submittedQuery) && (
+                    <button onClick={clearSearch}>
+                      Clear search
                     </button>
-
-                    <button>2</button>
-                    <button>3</button>
-                  </div>
-
-                  <button>
-                    Next
-                  </button>
+                  )}
                 </div>
               )}
             </div>

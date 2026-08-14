@@ -10,10 +10,10 @@ export async function initMeilisearch() {
 
             const productsIndex = meiliClient.index("products");
             await productsIndex.updateSettings({
-                  searchableAttributes: ["keywords"],
+                  searchableAttributes: ["keys"],
                   filterableAttributes: ["category", "price", "_geo"],
                   sortableAttributes: ["created_at", "price", "_geo"],
-                  displayedAttributes: ["product_id", "name", "image_url"],
+                  displayedAttributes: ["product_id", "name", "description", "image_url", "keys", "category", "price", "created_at", "_geo"],
             });
 
             console.log('Meilisearch "products" index ready');

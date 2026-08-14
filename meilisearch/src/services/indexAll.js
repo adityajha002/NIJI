@@ -4,7 +4,7 @@ import { supabase } from "../config/supabase.js";
 export async function indexAll() {
   const { data: products, error } = await supabase
     .from("products")
-    .select("product_id, name, imageurl, keys, price, created_at, shop_id, shops(category, latitude, longitude)")
+    .select("product_id, name, description, imageurl, keys, price, created_at, shop_id, shops(category, latitude, longitude)")
     .not("keys", "is", null);
 
   if (error) {
@@ -15,8 +15,9 @@ export async function indexAll() {
   const docs = products.map((p) => ({
     product_id: p.product_id,
     name: p.name,
+    description: p.description,
     image_url: p.imageurl,
-    keywords: p.keys,
+    keys: p.keys,
     category: p.shops.category,
     price: p.price,
     created_at: p.created_at,

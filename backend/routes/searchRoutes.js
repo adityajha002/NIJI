@@ -10,10 +10,18 @@ router.get("/", async (req, res) => {
       return res.json([]);
     }
 
+    const params = new URLSearchParams({ q: query });
+
+    if (req.query.lat) params.set("lat", req.query.lat);
+    if (req.query.lng) params.set("lng", req.query.lng);
+    if (req.query.radius) params.set("radius", req.query.radius);
+    if (req.query.category) params.set("category", req.query.category);
+    if (req.query.minPrice) params.set("minPrice", req.query.minPrice);
+    if (req.query.maxPrice) params.set("maxPrice", req.query.maxPrice);
+    if (req.query.sortBy) params.set("sortBy", req.query.sortBy);
+
     const searchUrl = process.env.MEILISEARCH_URL || "http://localhost:3001";
-    const response = await fetch(
-      `${searchUrl}/search?q=${encodeURIComponent(query)}`
-    );
+    const response = await fetch(`${searchUrl}/search?${params.toString()}`);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -40,9 +48,10 @@ router.get("/", async (req, res) => {
       description: product.description,
       price: product.price,
       category: product.category,
-      shop_name: product.shop_name,
-      shop_id: product.shop_id,
-      distance: product.distance,
+      distance:
+        product._geoDistance != null
+          ? Number((product._geoDistance / 1000).toFixed(1))
+          : undefined,
     }));
 
     res.json(results);

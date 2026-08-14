@@ -10,8 +10,9 @@ async function pushToMeilisearch(product, shop) {
     body: JSON.stringify({
       product_id: product.product_id,
       name: product.name,
+      description: product.description,
       image_url: product.imageurl,
-      keywords: product.keys,
+      keys: product.keys,
       category: shop.category,
       price: product.price,
       created_at: product.created_at,

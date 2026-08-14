@@ -86,6 +86,40 @@ const getProductsForCurrentShop = async (req, res) => {
       }
 };
 
+const getProductById = async (req, res) => {
+      const { productId } = req.params;
+
+      try {
+            const result = await db.query(
+                  `SELECT
+                        p.product_id,
+                        p.name,
+                        p.description,
+                        p.price,
+                        p.imageurl AS image_url,
+                        s.shopid AS shop_id,
+                        s.shopname AS shop_name,
+                        s.category AS shop_category,
+                        s.description AS shop_description,
+                        s.imageurl AS shop_image_url
+                  FROM products p
+                  LEFT JOIN shops s ON s.shopid = p.shop_id
+                  WHERE p.product_id = $1
+                  LIMIT 1`,
+                  [productId]
+            );
+
+            if (result.rows.length === 0) {
+                  return res.status(404).json({ error: 'Product not found' });
+            }
+
+            res.json(result.rows[0]);
+      } catch (error) {
+            console.error('Error fetching product:', error);
+            res.status(500).json({ error: 'Internal server error' });
+      }
+};
+
 router.get("/shop/:shopId", async (req, res) => {
       try {
             const { shopId } = req.params;
@@ -101,6 +135,7 @@ router.get("/shop/:shopId", async (req, res) => {
 });
 
 router.get('/', verifyToken, getProductsForCurrentShop);
+router.get('/:productId', getProductById);
 router.post('/', verifyToken, uploadProductImage, createProduct);
 
 module.exports = router;

@@ -6,8 +6,9 @@ export function indexProduct(product) {
   const doc = {
     product_id: product.product_id,
     name: product.name,
+    description: product.description,
     image_url: product.image_url,
-    keywords: product.keywords ?? [],
+    keys: product.keys ?? [],
     category: product.category,
     price: product.price,
     created_at: product.created_at,

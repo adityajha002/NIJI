@@ -25,7 +25,7 @@ function App() {
             </Route>
             <Route path="/search" element={<Search />} />
             <Route path="/search/:searchTerm" element={<Search />} />
-            <Route path="/products" element={<ProductView />} />
+            <Route path="/products/:productId" element={<ProductView />} />
             <Route element={<ProtectedRoute role="shop" />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/shop-edit" element={<ShopEdit />} />

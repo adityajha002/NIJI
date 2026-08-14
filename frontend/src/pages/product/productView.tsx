@@ -1,47 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import style from "./product.module.css";
 import Header from "../../components/nav/nav";
+import { useParams } from "react-router-dom";
+import { API_BASE_URL } from "../../config/api";
 
-const product: ProductPreview = {
-  product_id: 1,
-  name: "Full Cream Milk",
-  description:
-    "Fresh, rich and creamy full cream milk sourced from a trusted local dairy shop. Perfect for everyday use, tea, coffee and homemade recipes.",
-  price: 68,
-  category: "Dairy",
-  image_url:
-    "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=1000&q=85",
+type ProductPageData = ProductPreview & {
+  shop?: ShopPreview;
+  shop_id?: number | string;
+  shop_name?: string;
+  shop_category?: string;
+  shop_description?: string;
+  shop_image_url?: string;
 };
-
-const shop: ShopPreview = {
-  shop_id: 101,
-  shop_name: "Sharma Dairy",
-  category: "Dairy & Milk Products",
-  description:
-    "A local dairy shop serving fresh milk and everyday dairy products to the neighbourhood.",
-  image_url:
-    "https://images.unsplash.com/photo-1528498033373-3c6c08e93d79?auto=format&fit=crop&w=900&q=85",
-};
-
-/*
- * Replace these with your actual routes.
- */
-const SHOP_ROUTE = `/shops/${shop.shop_id}`;
-const MESSAGE_ROUTE = `/shops/${shop.shop_id}/message`;
 
 function ArrowIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M5 12H19" />
       <path d="M13 6L19 12L13 18" />
-    </svg>
-  );
-}
-
-function MessageIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M20 11.5C20 15.64 16.42 19 12 19C10.77 19 9.61 18.74 8.59 18.28L4 20L5.38 16.2C4.5 14.9 4 13.3 4 11.5C4 7.36 7.58 4 12 4C16.42 4 20 7.36 20 11.5Z" />
     </svg>
   );
 }
@@ -55,19 +31,123 @@ function BackIcon() {
   );
 }
 
+function MessageIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M20 11.5C20 15.64 16.42 19 12 19C10.77 19 9.61 18.74 8.59 18.28L4 20L5.38 16.2C4.5 14.9 4 13.3 4 11.5C4 7.36 7.58 4 12 4C16.42 4 20 7.36 20 11.5Z" />
+    </svg>
+  );
+}
+
+function PinIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M20 10.5C20 16 12 21 12 21C12 21 4 16 4 10.5C4 6.91 7.58 4 12 4C16.42 4 20 6.91 20 10.5Z" />
+      <circle cx="12" cy="10" r="2.5" />
+    </svg>
+  );
+}
+
 export default function ProductView() {
+  const { productId } = useParams<{ productId: string }>();
+  const [product, setProduct] = useState<ProductPageData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (!productId) {
+      setError(true);
+      setLoading(false);
+      return;
+    }
+
+    const loadProduct = async () => {
+      try {
+        setLoading(true);
+        setError(false);
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/products/${encodeURIComponent(productId)}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`Product request failed: ${response.status}`);
+        }
+
+        const data: ProductPageData = await response.json();
+        setProduct(data);
+      } catch (requestError) {
+        console.error("Product request failed:", requestError);
+        setProduct(null);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProduct();
+  }, [productId]);
+
+  if (loading) {
+    return (
+      <div className={style.page}>
+        <Header />
+        <main className={style.main}>
+          <div className={style.container}>
+            <div className={style.stateMessage}>Loading product...</div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className={style.page}>
+        <Header />
+        <main className={style.main}>
+          <div className={style.container}>
+            <div className={style.stateMessage}>
+              <h1>Product unavailable</h1>
+              <a href="/search" className={style.backLink}>
+                <BackIcon />
+                <span>Back to search</span>
+              </a>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  const shop = product.shop ?? {
+    shop_id: product.shop_id,
+    shop_name: product.shop_name,
+    category: product.shop_category,
+    description: product.shop_description,
+    image_url: product.shop_image_url,
+  };
+
+  const shopRoute = `/shops/${shop.shop_id}`;
+  const messageRoute = `/shops/${shop.shop_id}/message`;
+
   return (
     <div className={style.page}>
       <Header />
 
       <main className={style.main}>
         <div className={style.container}>
+
+          {/* BACK */}
           <a href="/search" className={style.backLink}>
             <BackIcon />
             <span>Back to search</span>
           </a>
 
+          {/* PRODUCT */}
           <section className={style.productSection}>
+
+            {/* IMAGE */}
             <div className={style.productVisual}>
               <div className={style.imageFrame}>
                 {product.image_url ? (
@@ -75,82 +155,109 @@ export default function ProductView() {
                 ) : (
                   <span className={style.imageFallback}>Niji</span>
                 )}
-              </div>
 
-              <div className={style.categoryTag}>{product.category}</div>
+                <div className={style.imageShade} />
+
+                <div className={style.imageTop}>
+
+                </div>
+              </div>
             </div>
 
+            {/* DETAILS */}
             <div className={style.productDetails}>
-              <span className={style.eyebrow}>PRODUCT DETAILS</span>
 
-              <h1>{product.name}</h1>
+              <h1>{product.name.toUpperCase()}</h1>
 
-              <div className={style.priceRow}>
-                <span className={style.priceLabel}>LOCAL PRICE</span>
-                <strong>₹{product.price}</strong>
+              <div className={style.priceArea}>
+
+                <div className={style.price}>
+                  <span className={style.currency}>₹</span>
+                  {product.price}
+                </div>
+
               </div>
 
-              <div className={style.divider} />
+              <div className={style.detailsDivider} />
 
               <div className={style.descriptionBlock}>
-                <h2>Description</h2>
+
                 <p>{product.description}</p>
               </div>
 
-              <a href={SHOP_ROUTE} className={style.shopButton}>
-                <span>Visit {shop.shop_name}</span>
-                <ArrowIcon />
-              </a>
+              <div className={style.productInfo}>
+                <div>
+                  <span>Category</span>
+                  <strong>{product.category?.toUpperCase()}</strong>
+                </div>
 
-              <p className={style.shopHint}>
-                View availability, other products and details from this local
-                shop.
-              </p>
+                <div>
+                  <span>Seller</span>
+                  <strong>{shop.shop_name?.toUpperCase()}</strong>
+                </div>
+              </div>
+
+              <a href={shopRoute} className={style.shopButton}>
+                <span>
+                  GET DIRECTIONS
+                </span>
+              </a>
             </div>
           </section>
 
+          {/* SHOP */}
           <section className={style.shopSection}>
-            <div className={style.sectionHeading}>
-              <div>
-                <span className={style.eyebrow}>SOLD BY</span>
-                <h2>Local shop</h2>
-              </div>
 
-              <span className={style.nearbyLabel}>LOCAL BUSINESS</span>
+            <div className={style.sectionTop}>
+              <div>
+                <h2>SOLD BY</h2>
+              </div>
             </div>
 
-            <a href={SHOP_ROUTE} className={style.shopCard}>
+            <a href={shopRoute} className={style.shopCard}>
+
               <div className={style.shopImage}>
                 {shop.image_url ? (
                   <img src={shop.image_url} alt={shop.shop_name} />
                 ) : (
                   <span>Shop</span>
                 )}
+
+                <div className={style.shopImageOverlay} />
               </div>
 
               <div className={style.shopInfo}>
-                <span className={style.shopCategory}>{shop.category}</span>
+
+                <div className={style.shopInfoTop}>
+                  <span className={style.shopCategory}>
+                    {shop.category}
+                  </span>
+
+                </div>
+
                 <h3>{shop.shop_name}</h3>
+
                 <p>{shop.description}</p>
+
+                <div className={style.shopLocation}>
+                  <PinIcon />
+                  <span>Your neighbourhood</span>
+                </div>
               </div>
 
-              <div className={style.shopArrow}>
+              <div className={style.shopCardArrow}>
                 <ArrowIcon />
               </div>
+
             </a>
-
-            <div className={style.shopActions}>
-              <a href={SHOP_ROUTE} className={style.primaryAction}>
-                View shop
-                <ArrowIcon />
-              </a>
-
-              <a href={MESSAGE_ROUTE} className={style.secondaryAction}>
-                <MessageIcon />
-                Message shop
-              </a>
-            </div>
           </section>
+
+          {/* FOOTER LINE */}
+          <div className={style.bottomStatement}>
+            <span>NIJIHAAT</span>
+            <span>DISCOVER · SHOP · LOCAL</span>
+          </div>
+
         </div>
       </main>
     </div>

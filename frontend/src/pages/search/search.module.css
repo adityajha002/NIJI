@@ -507,7 +507,7 @@
 ========================================= */
 
 .resultsArea {
-  padding: 125px 0 100px;
+  padding: 100px 0 0px;
 
   background: #000;
 }
@@ -516,7 +516,7 @@
   width: calc(100% - 80px);
   max-width: none;
 
-  margin: 0 auto;
+  /* margin: 0 auto; */
 
   display: grid;
 
@@ -533,10 +533,15 @@
 
 .filters {
   align-self: start;
-
+  height: calc(100vh - 100px);
   position: sticky;
 
   top: 25px;
+  background-color: #000;
+  background-image: url(../../assets/background.webp);
+  background-size: cover;
+  background-position: center;
+  padding: 40px 20px;
 }
 
 .filterHeader {
@@ -693,6 +698,7 @@
 
 .resultsContent {
   min-width: 0;
+  margin-top: 20px;
 }
 
 .resultsTop {
@@ -1519,4 +1525,10 @@
   *::after {
     transition: none !important;
   }
+}
+
+.locationError {
+  color: #d64545;
+  font-size: 0.85rem;
+  margin: 0.5rem 0 0;
 }

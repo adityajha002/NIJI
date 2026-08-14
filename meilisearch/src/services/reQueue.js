@@ -4,7 +4,7 @@ import { supabase } from "../config/supabase.js";
 export async function reQueue() {
       const { data: queueRows, error } = await supabase
             .from("product_queue")
-            .select("product_id, products(product_id, name, imageurl, keys, price, created_at, shops(category, latitude, longitude))")
+            .select("product_id, products(product_id, name, description, imageurl, keys, price, created_at, shops(category, latitude, longitude))")
             .eq("gemini_status", "done")
             .eq("meilisearch_status", "failed");
 
@@ -18,8 +18,9 @@ export async function reQueue() {
             const doc = {
                   product_id: p.product_id,
                   name: p.name,
+                  description: p.description,
                   image_url: p.imageurl,
-                  keywords: p.keys,
+                  keys: p.keys,
                   category: p.shops.category,
                   price: p.price,
                   created_at: p.created_at,
