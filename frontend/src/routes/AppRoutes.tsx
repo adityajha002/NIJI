@@ -1,15 +1,15 @@
 import { Routes, Route } from 'react-router-dom';
-import Home from '../pages/Home/Home';
+import Home from '../pages/home/home';
 import AddShop from '../pages/AddShop/AddShop';
-import Auth from '../pages/Auth/Auth';
+import Auth from '../pages/auth/auth';
 import ProtectedRoute from './ProtectedRoute';
-import Dashboard from '../pages/Dashboard/Dashboard';
+import Dashboard from '../pages/dashboard/dashboard';
 import EditShop from '../pages/EditShop/EditShop';
 import ShopView from '../pages/Shop/ShopView';
-import UserDashboard from '../pages/UserDashboard/UserDashboard';
+import UserDashboard from '../pages/UserDashboard/UserDashboard'; 
 import ProfileRoute from './ProfileRoute';
-import Search from '../pages/Search/Search';
-import ProductView from '../pages/Product/ProductView';
+import Search from '../pages/search/search'; 
+import ProductView from '../pages/product/productView'; 
 
 export const AppRoutes = () => {
   return (
