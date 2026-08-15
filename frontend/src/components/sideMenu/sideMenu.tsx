@@ -1,4 +1,4 @@
-import style from "./sideMenu.module.css";
+import style from "./SideMenu.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
 

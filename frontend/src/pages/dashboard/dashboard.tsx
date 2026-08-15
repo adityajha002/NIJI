@@ -4,11 +4,15 @@ import React, {
   useCallback,
 } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import style from "./dashboard.module.css";
+import style from "./Dashboard.module.css";
 import useAuth from "../../context/useAuth";
-import ProductCard from "./productcard/productcard";
-import AddProductForm from "./productcard/AddProductForm";
-import { API_BASE_URL } from "../../config/api";
+import ProductCard from "./components/ProductCard";
+import AddProductForm from "./components/AddProductForm";
+import { fetchShopDashboard } from "../../services/shopService";
+import { fetchProductsByShop } from "../../services/productService";
+import { ApiError } from "../../utils/apiError";
+import type { ApiShop } from "../../types/shop";
+import type { ApiProduct } from "../../types/product";
 
 interface AddProductProps {
   onClick: () => void;
@@ -46,8 +50,8 @@ function AddProduct({
 // Main Dashboard
 // --------------------------------------------------
 
-export default function ShopDashboard(): React.JSX.Element {
-  const { token, logout,user } = useAuth();
+export default function Dashboard(): React.JSX.Element {
+  const { token, logout, user } = useAuth();
   const navigate = useNavigate();
 
   const [shop, setShop] = useState<ApiShop | null>(null);
@@ -70,31 +74,7 @@ export default function ShopDashboard(): React.JSX.Element {
       }
 
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/products/shop/${shopId}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (
-          response.status === 401 ||
-          response.status === 403
-        ) {
-          handleAuthError();
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch products: ${response.status}`
-          );
-        }
-
-        const data: ApiProduct[] = await response.json();
+        const data: ApiProduct[] = await fetchProductsByShop(shopId, token);
         setProducts(data);
       } catch (error) {
         console.error(
@@ -114,35 +94,15 @@ export default function ShopDashboard(): React.JSX.Element {
   useEffect(() => {
     const fetchShop = async (): Promise<void> => {
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/api/shops/dashboard`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (
-          response.status === 401 ||
-          response.status === 403
-        ) {
-          handleAuthError();
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch shop: ${response.status}`
-          );
-        }
-
-        const data: ApiShop = await response.json();
+        const data: ApiShop = await fetchShopDashboard(token);
 
         setShop(data);
         await fetchProducts(data.shopid);
       } catch (error) {
+        if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
+          handleAuthError();
+          return;
+        }
         console.error(
           "Error fetching shop data:",
           error
@@ -353,7 +313,7 @@ export default function ShopDashboard(): React.JSX.Element {
               {products.map((product) => (
                 <ProductCard
                   key={product.product_id}
-                  image={product.imageurl}
+                  image={product.imageurl ?? ''}
                   name={product.name}
                   price={Number(product.price)}
                   stockCount={0}

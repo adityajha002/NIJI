@@ -1,26 +1,26 @@
-import { useState } from 'react'
-import Nav from '../../components/nav/nav.js'
-import Section1 from '../../components/section1/section1.js'
-import Section2 from '../../components/section2/section2.js'
-import Footer from '../../components/footer/footer.js'
-import style from './home.module.css'
-import SideMenu from '../../components/sideMenu/sideMenu.js'
+import { useState } from 'react';
+import Navbar from '../../components/Navbar/Navbar';
+import NearbyShops from './components/NearbyShops/NearbyShops';
+import WhyNiji from './components/WhyNiji/WhyNiji';
+import Footer from '../../components/Footer/Footer';
+import style from './Home.module.css';
+import SideMenu from '../../components/SideMenu/SideMenu';
 
 function Home() {
   const [sideMenu, setSideMenu] = useState(false);
   return (
     <div className={style.main}>
-      <Nav setSideMenu={setSideMenu}/>
+      <Navbar setSideMenu={setSideMenu}/>
       <div className={style.filmWrapper}>
         <div className={style.film}>
-          <Section1 />  
-          <Section2 />
+          <NearbyShops />  
+          <WhyNiji />
           <SideMenu isOpen={sideMenu} />
         </div>
       </div>
-          <Footer />
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

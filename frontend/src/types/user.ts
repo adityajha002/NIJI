@@ -1,9 +1,6 @@
 export interface User {
-  id: number;
-  name: string;
+  id: string | number;
   username: string;
-  email: string;
-  role: string;
-  lat?: number;
-  long?: number;
+  name: string;
+  role: 'user' | 'shop';
 }

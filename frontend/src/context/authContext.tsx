@@ -6,11 +6,10 @@ import {
 } from "react";
 import type { User } from "../types/user";
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   token: string | null;
   loading: boolean;
-
   login: (userData: User, token: string) => void;
   logout: () => void;
   updateUserRole: (role: string) => void;
@@ -43,7 +42,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       const updatedUser = {
         ...currentUser,
-        role,
+        role: role as "user" | "shop",
       };
 
       localStorage.setItem("user", JSON.stringify(updatedUser));

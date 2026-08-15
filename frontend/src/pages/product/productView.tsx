@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from "react";
-import style from "./product.module.css";
-import Header from "../../components/nav/nav";
+import { useEffect, useState } from "react";
+import style from "./ProductView.module.css";
+import Navbar from "../../components/Navbar/Navbar";
 import { useParams } from "react-router-dom";
-import { API_BASE_URL } from "../../config/api";
-
-type ProductPageData = ProductPreview & {
-  shop?: ShopPreview;
-  shop_id?: number | string;
-  shop_name?: string;
-  shop_category?: string;
-  shop_description?: string;
-  shop_image_url?: string;
-};
+import { fetchProductById } from "../../services/productService";
+import type { ProductPageData } from "../../types/product";
 
 function ArrowIcon() {
   return (
@@ -27,14 +19,6 @@ function BackIcon() {
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M19 12H5" />
       <path d="M11 6L5 12L11 18" />
-    </svg>
-  );
-}
-
-function MessageIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M20 11.5C20 15.64 16.42 19 12 19C10.77 19 9.61 18.74 8.59 18.28L4 20L5.38 16.2C4.5 14.9 4 13.3 4 11.5C4 7.36 7.58 4 12 4C16.42 4 20 7.36 20 11.5Z" />
     </svg>
   );
 }
@@ -66,15 +50,7 @@ export default function ProductView() {
         setLoading(true);
         setError(false);
 
-        const response = await fetch(
-          `${API_BASE_URL}/api/products/${encodeURIComponent(productId)}`
-        );
-
-        if (!response.ok) {
-          throw new Error(`Product request failed: ${response.status}`);
-        }
-
-        const data: ProductPageData = await response.json();
+        const data: ProductPageData = await fetchProductById(productId);
         setProduct(data);
       } catch (requestError) {
         console.error("Product request failed:", requestError);
@@ -91,7 +67,7 @@ export default function ProductView() {
   if (loading) {
     return (
       <div className={style.page}>
-        <Header />
+        <Navbar />
         <main className={style.main}>
           <div className={style.container}>
             <div className={style.stateMessage}>Loading product...</div>
@@ -104,7 +80,7 @@ export default function ProductView() {
   if (error || !product) {
     return (
       <div className={style.page}>
-        <Header />
+        <Navbar />
         <main className={style.main}>
           <div className={style.container}>
             <div className={style.stateMessage}>
@@ -129,11 +105,10 @@ export default function ProductView() {
   };
 
   const shopRoute = `/shops/${shop.shop_id}`;
-  const messageRoute = `/shops/${shop.shop_id}/message`;
 
   return (
     <div className={style.page}>
-      <Header />
+      <Navbar />
 
       <main className={style.main}>
         <div className={style.container}>

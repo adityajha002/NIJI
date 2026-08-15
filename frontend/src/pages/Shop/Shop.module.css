@@ -1,0 +1,556 @@
+.page {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #000;
+  color: #fff;
+  padding: 0px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 40px;
+}
+
+.rail {
+  width: 60px;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.body {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+    padding: 60px 40px;
+}
+
+.headRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shopName {
+  margin: 0;
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.category {
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 22px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.64)
+}
+
+.tagList {
+  display: flex;
+  gap: 8px;
+}
+
+.tag {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 23px;
+  margin: 0 15px;
+}
+
+.mapsBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #010101;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 600;
+  background: #fff;
+  padding: 8px 16px;
+  border-radius: 12px;
+}
+
+.headActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 25%;
+  flex-direction: column;
+}
+
+.messageBtn {
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 0;
+  background: rgba(255, 255, 255);
+  color: #000;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.thumb {
+  width: 65%;
+  height: auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbFallback {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.descLabel {
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  margin: 10px 0 ;
+}
+
+.description p {
+  margin: 5px 0;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  font-size: 20px;
+}
+
+.productsSection {
+  width: 100%;
+  padding: 10px 50px;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.sectionHead h2 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.count {
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 22px;
+}
+
+.emptyState {
+  padding: 40px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.productCard {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.productImage {
+  width: 100%;
+  height: 160px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.productImageFallback {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+}
+
+.productInfo {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.productInfo h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.productDesc {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.stateScreen {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+}
+
+.stateText,
+.stateTextError {
+  font-size: 18px;
+}
+
+.stateTextError {
+  color: #ef4444;
+}
+/* =========================================================
+   MOBILE RESPONSIVE
+   Desktop layout above remains unchanged
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .page {
+    width: 100%;
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* Remove the desktop card appearance on mobile */
+  .card {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  /* Hide the large desktop letter rail */
+  .rail {
+    display: none;
+  }
+
+  /* Main shop information */
+  .body {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 28px 20px 20px;
+    gap: 20px;
+    order: 1;
+  }
+
+  .headRow {
+    width: 100%;
+    display: block;
+  }
+
+  .identity {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .shopName {
+    margin: 0 0 10px;
+    font-size: 30px;
+    line-height: 1.1;
+    font-weight: 700;
+    word-break: break-word;
+  }
+
+  .metaRow {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .category {
+    padding: 7px 10px;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  .tagList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .tag {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  /* Google Maps button */
+  .mapsBtn {
+    padding: 7px 11px;
+    gap: 3px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .mapsBtn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Shop image + message */
+  .headActions {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 20px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    order: 2;
+  }
+
+  .thumb {
+    width: 100%;
+    height: 220px;
+    margin: 0;
+    border-radius: 12px;
+  }
+
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .thumbFallback {
+    font-size: 30px;
+  }
+
+  .messageBtn {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 12px 16px;
+    border-radius: 9px;
+    font-size: 15px;
+  }
+
+  /* Description */
+  .description {
+    width: 100%;
+    gap: 5px;
+  }
+
+  .descLabel {
+    margin: 8px 0 2px;
+    font-size: 13px;
+  }
+
+  .description p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  /* Products */
+  .productsSection {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+  }
+
+  .sectionHead {
+    margin-bottom: 16px;
+    gap: 8px;
+  }
+
+  .sectionHead h2 {
+    font-size: 22px;
+  }
+
+  .count {
+    padding: 2px 7px;
+    font-size: 13px;
+  }
+
+  .productGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .productCard {
+    border-radius: 10px;
+  }
+
+  .productImage {
+    height: 140px;
+  }
+
+  .productInfo {
+    padding: 12px;
+    gap: 6px;
+  }
+
+  .productInfo h3 {
+    font-size: 14px;
+    line-height: 1.25;
+  }
+
+  .productDesc {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .price {
+    font-size: 15px;
+  }
+
+  .emptyState {
+    padding: 30px 10px;
+  }
+
+  .stateText,
+  .stateTextError {
+    font-size: 16px;
+    text-align: center;
+    padding: 20px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+  .body {
+    padding: 24px 16px 18px;
+  }
+
+  .shopName {
+    font-size: 26px;
+  }
+
+  .headActions {
+    padding: 0 16px 20px;
+  }
+
+  .thumb {
+    height: 190px;
+  }
+
+  .productsSection {
+    padding: 18px 16px;
+  }
+
+  .productGrid {
+    gap: 10px;
+  }
+
+  .productImage {
+    height: 125px;
+  }
+
+  .productInfo {
+    padding: 10px;
+  }
+
+  .productInfo h3 {
+    font-size: 13px;
+  }
+
+  .price {
+    font-size: 14px;
+  }
+}
+
+
+/* =========================================================
+   EXTREMELY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 340px) {
+
+  .productGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .productImage {
+    height: 180px;
+  }
+}

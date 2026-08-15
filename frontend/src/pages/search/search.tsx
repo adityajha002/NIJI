@@ -1,14 +1,15 @@
-import React, {
+import {
   FormEvent,
   useEffect,
   useMemo,
   useState,
 } from "react";
 import { Link, useParams } from "react-router-dom";
-import style from "./search.module.css";
-import Header from "../../components/nav/nav";
-import { API_BASE_URL } from "../../config/api";
+import style from "./Search.module.css";
+import Navbar from "../../components/Navbar/Navbar";
 import { getCurrentLocation } from "../../services/locationService";
+import { searchProductsApi } from "../../services/productService";
+import type { SearchProduct } from "../../types/product";
 
 function SearchIcon() {
   return (
@@ -35,20 +36,6 @@ function FilterIcon() {
       <path d="M4 6H20" />
       <path d="M7 12H17" />
       <path d="M10 18H14" />
-    </svg>
-  );
-}
-
-function LocationIcon() {
-  return (
-    <svg
-      className={style.locationIcon}
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path d="M20 10C20 15.5 12 21 12 21S4 15.5 4 10a8 8 0 1 1 16 0Z" />
-      <circle cx="12" cy="10" r="2.5" />
     </svg>
   );
 }
@@ -126,15 +113,7 @@ export default function Search() {
         params.set("sortBy", "distance");
       }
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/search?${params.toString()}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`Search failed: ${response.status}`);
-      }
-
-      const data: SearchProduct[] = await response.json();
+      const data: SearchProduct[] = await searchProductsApi(params.toString());
       setResults(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Search error:", error);
@@ -147,6 +126,7 @@ export default function Search() {
   useEffect(() => {
     setQuery(routeSearchTerm);
     performSearch(routeSearchTerm);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeSearchTerm]);
 
   const categories = useMemo(() => {
@@ -247,7 +227,7 @@ export default function Search() {
   return (
     <div className={style.page}>
       <main>
-        <Header initialQuery={routeSearchTerm} />
+        <Navbar initialQuery={routeSearchTerm} />
 
         <section className={style.resultsArea}>
           <div className={style.resultsContainer}>
@@ -377,6 +357,7 @@ export default function Search() {
                 <div className={style.resultList}>
                   {filteredResults.map((product) => (
                     <Link
+                      key={product.product_id}
                       className={style.resultItem}
                       to={`/products/${product.product_id}`}
                       style={{ textDecoration: "none" }}
