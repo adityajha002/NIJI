@@ -4,7 +4,7 @@ import React, {
   useCallback,
 } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import style from "./Dashboard.module.css";
+import style from "./dashboard.module.css";
 import useAuth from "../../context/useAuth";
 import ProductCard from "./components/ProductCard";
 import AddProductForm from "./components/AddProductForm";
