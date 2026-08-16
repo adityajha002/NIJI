@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../context/useAuth";
 import styles from "./EditShop.module.css";
-import Loading from "../../components/Loading/Loading";
+import Loading from "../../components/loading/loading";
 import { fetchShopDashboard, updateShopDashboard } from "../../services/shopService";
 import { ApiError } from "../../utils/apiError";
 import type { EditShopFormData, ApiShop } from "../../types/shop";
