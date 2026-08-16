@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import style from "./Shop.module.css";
-import Loading from "../../components/Loading/Loading";
+import Loading from "../../components/loading/loading";
 import { fetchShopById } from "../../services/shopService";
 import { fetchProductsByShop } from "../../services/productService";
 import { useAuth } from "../../context/useAuth";
