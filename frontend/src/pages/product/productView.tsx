@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import style from "./productView.module.css";
+import style from "./ProductView.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import { useParams } from "react-router-dom";
 import { fetchProductById } from "../../services/productService";
