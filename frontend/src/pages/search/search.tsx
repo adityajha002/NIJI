@@ -5,7 +5,7 @@ import {
   useState,
 } from "react";
 import { Link, useParams } from "react-router-dom";
-import style from "./Search.module.css";
+import style from "./search.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import { getCurrentLocation } from "../../services/locationService";
 import { searchProductsApi } from "../../services/productService";
