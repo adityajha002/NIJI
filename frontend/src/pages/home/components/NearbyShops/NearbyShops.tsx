@@ -2,7 +2,7 @@ import { useState, useEffect, CSSProperties } from 'react';
 import style from './NearbyShops.module.css';
 import CategoryNav from '../../../../components/Category/CategoryNav';
 import ShopCard from '../../../../components/ShopCard/ShopCard';
-import Loading from '../../../../components/Loading/Loading';
+import Loading from '../../../../components/loading/loading';
 import { fetchShopsByCategory } from '../../../../services/shopService';
 import type { ApiShop } from '../../../../types/shop';
 
