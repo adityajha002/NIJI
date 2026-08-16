@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm, RegisterOptions } from "react-hook-form";
-import styles from "./Auth.module.css";
+import styles from "./auth.module.css";
 import welcomeVideo from "../../assets/videos/welcome.mp4";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
