@@ -16,7 +16,7 @@ export async function initMeilisearch() {
                   displayedAttributes: ["product_id", "name", "description", "image_url", "keys", "category", "price", "created_at", "_geo"],
             });
 
-            console.log('Meilisearch "products" index ready');
+            console.log("🔥 LOCAL INDEXALL IS RUNNING");
       } catch (err) {
             console.error("Meilisearch init failed:", err.message);
       }

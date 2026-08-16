@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import style from "./ProductView.module.css";
+import style from "./productView.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import { useParams } from "react-router-dom";
 import { fetchProductById } from "../../services/productService";
@@ -87,7 +87,6 @@ export default function ProductView() {
               <h1>Product unavailable</h1>
               <a href="/search" className={style.backLink}>
                 <BackIcon />
-                <span>Back to search</span>
               </a>
             </div>
           </div>
@@ -227,11 +226,6 @@ export default function ProductView() {
             </a>
           </section>
 
-          {/* FOOTER LINE */}
-          <div className={style.bottomStatement}>
-            <span>NIJIHAAT</span>
-            <span>DISCOVER · SHOP · LOCAL</span>
-          </div>
 
         </div>
       </main>

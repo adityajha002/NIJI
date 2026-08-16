@@ -12,10 +12,9 @@ export function indexProduct(product) {
     category: product.category,
     price: product.price,
     created_at: product.created_at,
-    _geo: {
-      lat: product.shop_lat,
-      lng: product.shop_lng,
-    },
+    ...(p.shops.latitude != null && p.shops.longitude != null
+      ? { _geo: { lat: p.shops.latitude, lng: p.shops.longitude } }
+      : {}),
   };
 
   return productsIndex.addDocuments([doc]).catch((err) => {

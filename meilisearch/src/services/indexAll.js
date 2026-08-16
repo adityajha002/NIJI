@@ -1,5 +1,5 @@
 import { meiliClient } from "../config/meiliClient.js";
-import { supabase } from "../config/supabase.js"; 
+import { supabase } from "../config/supabase.js";
 
 export async function indexAll() {
   const { data: products, error } = await supabase
@@ -21,13 +21,15 @@ export async function indexAll() {
     category: p.shops.category,
     price: p.price,
     created_at: p.created_at,
-    _geo: { lat: p.shops.latitude, lng: p.shops.longitude },
+    ...(p.shops.latitude != null && p.shops.longitude != null
+      ? { _geo: { lat: p.shops.latitude, lng: p.shops.longitude } }
+      : {}),
   }));
-  
+
   const productsIndex = meiliClient.index("products");
   const failedIds = [];
 
-  
+
   const chunkSize = 500;
   for (let i = 0; i < docs.length; i += chunkSize) {
     const chunk = docs.slice(i, i + chunkSize);
@@ -40,5 +42,5 @@ export async function indexAll() {
   }
 
   console.log(`Reindex complete: ${docs.length - failedIds.length}/${docs.length} succeeded`);
-  return failedIds; 
+  return failedIds;
 }

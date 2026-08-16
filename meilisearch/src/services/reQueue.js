@@ -24,7 +24,9 @@ export async function reQueue() {
                   category: p.shops.category,
                   price: p.price,
                   created_at: p.created_at,
-                  _geo: { lat: p.shops.latitude, lng: p.shops.longitude },
+                  ...(p.shops.latitude != null && p.shops.longitude != null
+                        ? { _geo: { lat: p.shops.latitude, lng: p.shops.longitude } }
+                        : {}),
             };
 
             try {
