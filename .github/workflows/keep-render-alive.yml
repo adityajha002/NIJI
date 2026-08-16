@@ -1,0 +1,22 @@
+name: Keep Render Backend Alive
+
+on:
+  schedule:
+    # Run every 10 minutes
+    - cron: "*/10 * * * *"
+
+  # Allows you to manually run the workflow from GitHub
+  workflow_dispatch:
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping Render Backend
+        run: |
+          curl --fail --silent --show-error \
+            --max-time 30 \
+            https://niji-xjcj.onrender.com/health
+
+          echo "Render backend is awake."
