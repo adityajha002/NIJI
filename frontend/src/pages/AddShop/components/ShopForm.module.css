@@ -10,7 +10,25 @@
   box-sizing: border-box;
   color: #fff;
 }
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid white;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
 .title {
   font-size: clamp(22px, 4vw, 32px);
   font-weight: 600;

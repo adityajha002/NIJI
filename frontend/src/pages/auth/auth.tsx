@@ -199,7 +199,7 @@ const Auth: React.FC = () => {
                   className={styles.button}
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Logging in..." : "Login"}
+                  {isSubmitting ? <span className={styles.spinner}></span> : "LOGIN"}
                 </button>
               </form>
             </div>
@@ -273,8 +273,8 @@ const Auth: React.FC = () => {
                   disabled={isSubmitting}
                 >
                   {isSubmitting
-                    ? "Signing up..."
-                    : "Sign Up"}
+                    ? <span className={styles.spinner}></span>
+                    : "SIGN UP"}
                 </button>
               </form>
             </div>

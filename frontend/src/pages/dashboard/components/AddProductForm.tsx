@@ -126,7 +126,7 @@ export default function AddProductForm({
             Cancel
           </button>
           <button className={style.button} type="submit" disabled={uploading}>
-            {uploading ? 'Uploading...' : 'Add Product'}
+            {uploading ? <span className={style.spinner}/> : 'Add Product'}
           </button>
         </div>
       </form>

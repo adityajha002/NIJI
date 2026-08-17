@@ -252,7 +252,7 @@ const ShopForm: React.FC = () => {
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'SAVING…' : 'DONE'}
+            {isSubmitting ? <span className={style.spinner}/> : 'DONE'}
           </button>
         </form>
       </div>
