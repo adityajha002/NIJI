@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import style from "./ProductView.module.css";
 import Navbar from "../../components/Navbar/Navbar";
-import { useParams } from "react-router-dom";
+import { useParams , Link} from "react-router-dom";
 import { fetchProductById } from "../../services/productService";
 import type { ProductPageData } from "../../types/product";
 
@@ -85,9 +85,9 @@ export default function ProductView() {
           <div className={style.container}>
             <div className={style.stateMessage}>
               <h1>Product unavailable</h1>
-              <a href="/search" className={style.backLink}>
+              <Link to="/search" className={style.backLink}>
                 <BackIcon />
-              </a>
+              </Link>
             </div>
           </div>
         </main>
@@ -113,10 +113,10 @@ export default function ProductView() {
         <div className={style.container}>
 
           {/* BACK */}
-          <a href="/search" className={style.backLink}>
+          <Link to="/search" className={style.backLink}>
             <BackIcon />
             <span>Back to search</span>
-          </a>
+          </Link>
 
           {/* PRODUCT */}
           <section className={style.productSection}>
@@ -171,11 +171,11 @@ export default function ProductView() {
                 </div>
               </div>
 
-              <a href={shopRoute} className={style.shopButton}>
+              <Link to={shopRoute} className={style.shopButton}>
                 <span>
                   GET DIRECTIONS
                 </span>
-              </a>
+              </Link>
             </div>
           </section>
 
@@ -188,7 +188,7 @@ export default function ProductView() {
               </div>
             </div>
 
-            <a href={shopRoute} className={style.shopCard}>
+            <Link to={shopRoute} className={style.shopCard}>
 
               <div className={style.shopImage}>
                 {shop.image_url ? (
@@ -223,7 +223,7 @@ export default function ProductView() {
                 <ArrowIcon />
               </div>
 
-            </a>
+            </Link>
           </section>
 
 

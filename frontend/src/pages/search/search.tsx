@@ -391,18 +391,6 @@ export default function Search() {
                         )}
 
                         <div className={style.productMeta}>
-                          {product.shop_name && (
-                            <>
-                              <strong>
-                                {product.shop_name}
-                              </strong>
-
-                              {product.distance != null && (
-                                <span>•</span>
-                              )}
-                            </>
-                          )}
-
                           {product.distance != null && (
                             <span>
                               {product.distance} km away
@@ -418,14 +406,6 @@ export default function Search() {
                           ₹{product.price}
                         </strong>
                       </div>
-
-                      <a
-                        href={`/products/${product.product_id}`}
-                        className={style.resultAction}
-                        aria-label={`View ${product.name}`}
-                      >
-                        <ArrowIcon />
-                      </a>
                     </Link>
                   ))}
                 </div>

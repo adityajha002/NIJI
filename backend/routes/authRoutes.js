@@ -3,8 +3,8 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
+const {loginLimiter} = require('../middleware/rateLimiter')
 
-// User registration
 router.post('/register', async (req, res) => {
   const { name, username, password } = req.body;
 
@@ -14,42 +14,20 @@ router.post('/register', async (req, res) => {
       try {
             const hashedPassword = await bcrypt.hash(password, 10);
             const newUser = await db.query(
-                  'INSERT INTO users (name, username, password,role,lat,long) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+                  'INSERT INTO users (name, username, password,role,lat,long) VALUES ($1, $2, $3, $4, $5, $6)',
                   [name, username, hashedPassword, 'user', null, null]
             );
-            res.status(201).json(newUser.rows[0]);
-      } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Server error' });
-      }
-});
-
-// shop registration
-router.post('/register-shop', async (req, res) => {
-  const {name ,username, password} = req.body;
-  
-  if (!name || !username || !password) {
-    return res.status(400).json({ error: 'name, username, password are required' });
-  }
-      try {
-            const hashedPassword = await bcrypt.hash(password,10);
-            const newShop = await db.query(
-                  'INSERT INTO users (name, username, password, role, lat, long) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-                  [name, username, hashedPassword, 'shop', null, null]
-            );
-            res.status(201).json(newShop.rows[0]);
+            res.status(201).json({message: 'new user created succesfully'});
       } catch (err) {
             if (err.code === '23505') {
-                  return res.status(400).json({ error: 'Username already exists' });
+                  return res.status(409).json({ error: 'Username already exists' });
             }
             console.error(err);
             res.status(500).json({ error: 'Server error' });
       }
 });
 
-// User login
-
-router.post('/login', async (req,res) => {
+router.post('/login', loginLimiter, async (req,res) => {
       const {username,password,lat,long} = req.body;
 
       if (!username || !password) {
@@ -61,12 +39,12 @@ router.post('/login', async (req,res) => {
             const user = result.rows[0];
 
             if(!user) {
-                  return res.status(400).json({ error : 'User not found' });
+                  return res.status(400).json({ error : 'Invalid Credentials' });
             }
 
             const Match = await bcrypt.compare(password,user.password);
             if(!Match) {
-                  return res.status(400).json({ error : 'Invalid password' });
+                  return res.status(400).json({ error : 'Invalid Credentials' });
             }
 
             if (lat!=null && long !=null){
