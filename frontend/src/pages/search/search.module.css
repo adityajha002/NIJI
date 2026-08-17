@@ -18,7 +18,7 @@
 
   min-height: 100vh;
   background: #000;
-  background:url(../../assets/background2.webp);
+  background:url(../../assets/images/background2.webp);
   color: var(--text);
 
   font-family:
@@ -299,7 +299,7 @@
   border-radius: 5px;
 
   background-color: transparent;
-  background-image: url(../../assets/search.png);
+  background-image: url(../../assets/icons/search.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: 34px 34px;
@@ -538,7 +538,7 @@
 
   top: 25px;
   background-color: #000;
-  background-image: url(../../assets/background.webp);
+  background-image: url(../../assets/images/background.webp);
   background-size: cover;
   background-position: center;
   padding: 40px 20px;

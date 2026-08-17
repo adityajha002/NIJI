@@ -214,7 +214,20 @@ export default function Dashboard(): React.JSX.Element {
               >
                 <span className={style.actionIcon}>
                   <img
-                    src="/assets/home.png"
+                    src="../../assets/icons/home.png"
+                    alt=""
+                  />
+                </span>
+              </Link>
+
+
+              <Link
+                to="/"
+                className={style.actionButton}
+              >
+                <span className={style.actionIcon}>
+                  <img
+                    src="../../assets/icons/home.png"
                     alt=""
                   />
                 </span>
@@ -227,20 +240,7 @@ export default function Dashboard(): React.JSX.Element {
               >
                 <span className={style.actionIcon}>
                   <img
-                    src="/assets/edit.webp"
-                    alt=""
-                  />
-                </span>
-              </Link>
-
-
-              <Link
-                to="/shop-edit"
-                className={style.actionButton}
-              >
-                <span className={style.actionIcon}>
-                  <img
-                    src="/assets/setting.png"
+                    src="../../assets/icons/settings.png"
                     alt=""
                   />
                 </span>
