@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log('Server is running on port 5000');
 });
-
+retryQueue().catch((err) => console.error('retryQueue failed:', err.message));
 setInterval(() => {
   retryQueue().catch((err) => console.error('retryQueue failed:', err.message));
 }, 3 * 60 * 1000);
