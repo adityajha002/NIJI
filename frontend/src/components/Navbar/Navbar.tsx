@@ -114,7 +114,7 @@ const Navbar = ({
                     Searching...
                   </div>
                 ) : results.length > 0 ? (
-                  results.map((r) => (
+                  results.slice(0, 7).map((r) => (
                     <Link
                       key={r.product_id}
                       to={`/search/${encodeURIComponent(r.name)}`}

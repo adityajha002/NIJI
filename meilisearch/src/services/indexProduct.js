@@ -12,8 +12,8 @@ export function indexProduct(product) {
     category: product.category,
     price: product.price,
     created_at: product.created_at,
-    ...(p.shops.latitude != null && p.shops.longitude != null
-      ? { _geo: { lat: p.shops.latitude, lng: p.shops.longitude } }
+    ...(product.shop_lat != null && product.shop_lng != null
+      ? { _geo: { lat: product.shop_lat, lng: product.shop_lng } }
       : {}),
   };
 
